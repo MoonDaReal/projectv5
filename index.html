@@ -1,0 +1,2715 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MOMENTU · Pre-order</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Sans+JP:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ───────────── RESET & BASE ───────────── */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
+      background: #f5f7fa;
+      color: #1a1a2e;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      transition: background 0.4s, color 0.4s;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body.dark {
+      background: #0a0a14;
+      color: #e0e0f0;
+    }
+
+    /* ─── ONIGIRAZU BACKGROUND ─── */
+    .onigirazu-bg {
+      position: fixed;
+      top:0; left:0; width:100%; height:100%;
+      z-index:0;
+      pointer-events:none;
+      overflow:hidden;
+      opacity:0.5;
+      font-size:60px;
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-around;
+      align-content:space-around;
+      padding:40px;
+    }
+    body.dark .onigirazu-bg { opacity:0.4; }
+    .onigirazu-bg span {
+      display:inline-block;
+      animation: floatOni 28s ease-in-out infinite alternate;
+      transform-origin:center;
+      user-select:none;
+      will-change:transform, opacity;
+    }
+    .onigirazu-bg span:nth-child(odd) { animation-duration:28s; animation-delay:3s; }
+    .onigirazu-bg span:nth-child(3n) { animation-duration:24s; animation-delay:5s; font-size:80px; }
+    .onigirazu-bg span:nth-child(5n+2) { animation-duration:36s; animation-delay:1s; font-size:45px; }
+    .onigirazu-bg span:nth-child(7n+4) { animation-duration:20s; animation-delay:7s; font-size:35px; }
+    @keyframes floatOni {
+      0% { transform:translate(0,0) rotate(0deg) scale(0.9); opacity:0.5; }
+      25% { transform:translate(25px,-35px) rotate(6deg) scale(1.1); opacity:0.8; }
+      50% { transform:translate(-20px,25px) rotate(-4deg) scale(0.95); opacity:0.6; }
+      75% { transform:translate(15px,-15px) rotate(3deg) scale(1.05); opacity:0.9; }
+      100% { transform:translate(-10px,20px) rotate(-2deg) scale(0.85); opacity:0.5; }
+    }
+
+    /* ─── APP ─── */
+    .app {
+      max-width: 560px;
+      width:100%;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 44px;
+      overflow: hidden;
+      position:relative;
+      z-index:1;
+      border:1px solid rgba(255,255,255,0.3);
+      transition: background 0.4s, border-color 0.4s;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.02);
+    }
+    body.dark .app {
+      background: rgba(16,16,32,0.94);
+      border-color: rgba(255,255,255,0.04);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    }
+
+    /* ─── GOLD ACCENT ─── */
+    .gold { color: #f4d58d; }
+    .border-gold { border-color: #f4d58d; }
+    .bg-gold-light { background: rgba(244,213,141,0.08); }
+
+    /* ─── HEADER ─── */
+    .app-header {
+      padding: 16px 24px 12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom:1px solid rgba(0,0,0,0.04);
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    body.dark .app-header { border-bottom-color:rgba(255,255,255,0.04); }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight:700;
+      letter-spacing:-0.5px;
+      color:#1a1a2e;
+      display:flex;
+      align-items:center;
+      gap:2px;
+    }
+    body.dark .logo { color:#fff; }
+    .logo span { color:#e67e22; }
+    .logo small {
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+      font-size:9px;
+      font-weight:500;
+      color:#b2bec3;
+      margin-left:6px;
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+    .header-controls { display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
+    .header-controls button {
+      background:rgba(0,0,0,0.04);
+      border:none;
+      padding:6px 12px;
+      border-radius:40px;
+      font-size:12px;
+      font-weight:500;
+      cursor:pointer;
+      transition:0.2s;
+      color:#1a1a2e;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+    }
+    body.dark .header-controls button {
+      background:rgba(255,255,255,0.06);
+      color:#d0d0e8;
+    }
+    .header-controls button:hover { background:rgba(230,126,34,0.12); color:#e67e22; }
+    .header-controls .lang-btn.active { background:#e67e22; color:#fff; }
+    .header-controls .theme-btn {
+      font-size:18px;
+      padding:4px 8px;
+      background:transparent;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .header-controls .theme-btn.rotated { transform: rotate(360deg); }
+
+    .role-toggle {
+      display:flex;
+      gap:4px;
+      background:rgba(0,0,0,0.04);
+      padding:4px;
+      border-radius:40px;
+    }
+    body.dark .role-toggle { background:rgba(255,255,255,0.04); }
+    .role-toggle button {
+      background:transparent;
+      border:none;
+      padding:5px 14px;
+      border-radius:30px;
+      font-size:11px;
+      font-weight:600;
+      color:#636e72;
+      cursor:pointer;
+      transition:0.2s;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+    }
+    body.dark .role-toggle button { color:#8888aa; }
+    .role-toggle button.active {
+      background:#1a1a2e;
+      color:#fff;
+    }
+    body.dark .role-toggle button.active { background:#e67e22; color:#fff; }
+    .role-toggle button:first-child.active { background:#e67e22; color:#fff; }
+
+    .main {
+      padding: 16px 24px 24px;
+      max-height: 78vh;
+      overflow-y: auto;
+      scroll-behavior:smooth;
+    }
+    .main::-webkit-scrollbar { width:4px; }
+    .main::-webkit-scrollbar-thumb { background:#d0d5dd; border-radius:10px; }
+    body.dark .main::-webkit-scrollbar-thumb { background:#444466; }
+
+    /* ─── BANNER ─── */
+    .banner {
+      border-radius:28px;
+      padding:24px 28px;
+      color:#fff;
+      margin-bottom:24px;
+      position:relative;
+      overflow:hidden;
+      box-shadow: 0 8px 32px rgba(230,126,34,0.2);
+      transition: background 0.5s ease;
+      min-height: 140px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .banner .banner-bg {
+      position:absolute;
+      top:0; left:0; width:100%; height:100%;
+      background: linear-gradient(135deg, #e67e22, #f39c12, #d35400);
+      z-index:0;
+    }
+    .banner .banner-bg::after {
+      content: '🍙 🍣 🥢 🍱';
+      position:absolute;
+      top:-20px;
+      right:-10px;
+      font-size:80px;
+      opacity:0.1;
+      transform:rotate(-12deg);
+      letter-spacing:16px;
+      white-space:nowrap;
+      pointer-events:none;
+    }
+    .banner h2, .banner p, .banner .btn-order-now, .banner .flash {
+      position:relative;
+      z-index:1;
+    }
+    .banner h2 {
+      font-family: 'Playfair Display','Noto Sans JP',serif;
+      font-size:26px;
+      font-weight:700;
+      line-height:1.3;
+      word-break:break-word;
+    }
+    .banner p {
+      opacity:0.9;
+      font-size:14px;
+      margin-top:4px;
+      line-height:1.6;
+      word-break:break-word;
+    }
+    .banner .btn-order-now {
+      margin-top:14px;
+      background:#fff;
+      color:#e67e22;
+      border:none;
+      padding:10px 32px;
+      border-radius:40px;
+      font-weight:700;
+      font-size:15px;
+      cursor:pointer;
+      box-shadow:0 4px 16px rgba(0,0,0,0.08);
+      transition:0.2s;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+    }
+    .banner .btn-order-now:hover { transform:scale(1.04); box-shadow:0 6px 24px rgba(0,0,0,0.15); }
+    .banner .flash {
+      position:absolute;
+      right:16px;
+      top:16px;
+      background:rgba(255,255,255,0.2);
+      backdrop-filter:blur(4px);
+      padding:4px 14px;
+      border-radius:40px;
+      font-size:11px;
+      font-weight:600;
+      z-index:1;
+      letter-spacing:0.5px;
+    }
+
+    /* ─── SEARCH & FILTER ─── */
+    .search-row { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+    .search-row input {
+      flex:1;
+      padding:10px 18px;
+      border:1px solid rgba(0,0,0,0.04);
+      border-radius:40px;
+      font-size:14px;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+      background:rgba(255,255,255,0.4);
+      backdrop-filter:blur(4px);
+      outline:none;
+      transition:0.2s;
+      min-width:140px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+      color:inherit;
+    }
+    body.dark .search-row input {
+      background:rgba(255,255,255,0.04);
+      border-color:rgba(255,255,255,0.04);
+    }
+    .search-row input:focus { border-color:#e67e22; box-shadow:0 0 0 3px rgba(230,126,34,0.06); }
+
+    .filter-group { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+    .filter-group .filter-tag {
+      background:rgba(0,0,0,0.03);
+      border:1px solid transparent;
+      padding:4px 14px;
+      border-radius:40px;
+      font-size:12px;
+      font-weight:500;
+      cursor:pointer;
+      transition:0.2s;
+      color:#636e72;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+    }
+    body.dark .filter-tag { background:rgba(255,255,255,0.04); color:#aaaacc; }
+    .filter-tag.active { background:#e67e22; color:#fff; border-color:#e67e22; }
+    .filter-tag:hover { border-color:#e67e22; }
+
+    .view-toggle {
+      display:flex;
+      gap:4px;
+      margin-left:auto;
+      background:rgba(0,0,0,0.04);
+      border-radius:40px;
+      padding:4px;
+    }
+    body.dark .view-toggle { background:rgba(255,255,255,0.04); }
+    .view-toggle button {
+      background:transparent;
+      border:none;
+      padding:4px 12px;
+      border-radius:30px;
+      font-size:14px;
+      cursor:pointer;
+      transition:0.2s;
+      color:#8888aa;
+    }
+    .view-toggle button.active { background:#1e293b; color:#fff; }
+    body.dark .view-toggle button.active { background:#e67e22; color:#fff; }
+
+    /* ─── TAB WITH TRANSITION ─── */
+    .tab-content {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity:1;
+      transform:translateY(0);
+    }
+    .tab-content.hidden {
+      display:block !important;
+      opacity:0;
+      transform:translateY(8px);
+      pointer-events:none;
+      height:0;
+      overflow:hidden;
+      padding:0;
+      margin:0;
+    }
+    .tab-content.visible {
+      display:block !important;
+      opacity:1;
+      transform:translateY(0);
+      pointer-events:auto;
+      height:auto;
+      padding:inherit;
+      margin:inherit;
+    }
+
+    .tabs {
+      display:flex;
+      gap:4px;
+      margin-bottom:20px;
+      border-bottom:1px solid rgba(0,0,0,0.04);
+      padding-bottom:12px;
+      flex-wrap:wrap;
+    }
+    body.dark .tabs { border-bottom-color:rgba(255,255,255,0.04); }
+    .tabs button {
+      background:transparent;
+      border:none;
+      padding:8px 16px;
+      font-size:14px;
+      font-weight:500;
+      color:#636e72;
+      border-radius:40px;
+      cursor:pointer;
+      transition:0.2s;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    body.dark .tabs button { color:#8888aa; }
+    .tabs button.active { background:#1e293b; color:#fff; }
+    body.dark .tabs button.active { background:#e67e22; color:#fff; }
+    .tabs button .badge {
+      background:#e67e22;
+      color:#fff;
+      font-size:9px;
+      font-weight:700;
+      padding:1px 8px;
+      border-radius:20px;
+      margin-left:4px;
+    }
+
+    /* ─── RECOMMENDED CAROUSEL ─── */
+    .recommended-section {
+      margin-bottom:20px;
+    }
+    .recommended-section .section-label {
+      font-size:13px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:1.2px;
+      color:#b2bec3;
+      margin-bottom:10px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .recommended-section .section-label .gold { color:#f4d58d; }
+    .carousel {
+      display:flex;
+      gap:10px;
+      overflow-x:auto;
+      padding:4px 2px 8px;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+    }
+    .carousel::-webkit-scrollbar { height:3px; }
+    .carousel::-webkit-scrollbar-thumb { background:#e67e22; border-radius:10px; }
+    .carousel-item {
+      flex:0 0 120px;
+      background:rgba(255,255,255,0.4);
+      backdrop-filter:blur(4px);
+      border-radius:16px;
+      padding:14px 12px;
+      text-align:center;
+      border:1px solid rgba(0,0,0,0.03);
+      scroll-snap-align:start;
+      transition:0.2s;
+      cursor:pointer;
+      min-height:100px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+    }
+    body.dark .carousel-item { background:rgba(255,255,255,0.03); border-color:rgba(255,255,255,0.03); }
+    .carousel-item:hover { border-color:#e67e22; transform:translateY(-2px); }
+    .carousel-item .emoji { font-size:32px; }
+    .carousel-item .name { font-size:12px; font-weight:600; }
+    .carousel-item .price { font-size:11px; color:#e67e22; font-weight:600; }
+
+    /* ───────────── MENU CARDS ───────────── */
+    .menu-grid { display:flex; flex-direction:column; gap:12px; margin-bottom:16px; }
+    .menu-grid.list .menu-card { flex-direction:row; }
+    .menu-grid.grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .menu-grid.grid .menu-card {
+      flex-direction:column;
+      align-items:flex-start;
+      padding:16px;
+    }
+    .menu-grid.grid .menu-card .actions { width:100%; justify-content:space-between; margin-top:8px; }
+
+    .menu-card {
+      background:rgba(255,255,255,0.5);
+      backdrop-filter:blur(4px);
+      border-radius:20px;
+      padding:16px 18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border:1px solid rgba(0,0,0,0.03);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      gap:12px;
+      position:relative;
+    }
+    body.dark .menu-card {
+      background:rgba(255,255,255,0.03);
+      border-color:rgba(255,255,255,0.03);
+    }
+    .menu-card:hover {
+      border-color:rgba(230,126,34,0.3);
+      transform:translateY(-2px);
+      box-shadow: 0 0 20px rgba(230,126,34,0.08), 0 8px 24px rgba(0,0,0,0.04);
+    }
+    .menu-card .food-icon {
+      font-size:36px;
+      width:52px;
+      height:52px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(230,126,34,0.06);
+      border-radius:16px;
+      flex-shrink:0;
+    }
+    body.dark .menu-card .food-icon { background:rgba(255,255,255,0.04); }
+    .menu-card .info { flex:1; }
+    .menu-card .info h4 {
+      font-family: 'Playfair Display','Noto Sans JP',serif;
+      font-size:18px;
+      font-weight:600;
+      color:#1a1a2e;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    body.dark .menu-card .info h4 { color:#f0f0f5; }
+    .menu-card .info h4 .badge-item {
+      font-size:9px;
+      font-weight:700;
+      padding:2px 10px;
+      border-radius:20px;
+      background:linear-gradient(135deg, #e67e22, #f39c12);
+      color:#fff;
+      letter-spacing:0.3px;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+    }
+    .menu-card .info h4 .badge-item.chef {
+      background:linear-gradient(135deg, #f4d58d, #e6c07a);
+      color:#1a1a2e;
+    }
+    body.dark .menu-card .info h4 .badge-item.chef { background:linear-gradient(135deg, #f4d58d, #d4b06a); color:#1a1a2e; }
+    .menu-card .info h4 .badge-item.premium-gold {
+      background:linear-gradient(135deg, #f4d58d, #e6c07a);
+      color:#1a1a2e;
+      border:1px solid rgba(244,213,141,0.3);
+    }
+    .menu-card .info p {
+      font-size:13px;
+      color:#8888aa;
+      margin-top:2px;
+    }
+    .menu-card .info .tags {
+      display:flex;
+      gap:5px;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+    .menu-card .info .tags span {
+      background:rgba(0,0,0,0.04);
+      font-size:10px;
+      font-weight:600;
+      padding:2px 12px;
+      border-radius:20px;
+      color:#2d3436;
+    }
+    body.dark .menu-card .info .tags span { background:rgba(255,255,255,0.05); color:#aaaacc; }
+    .menu-card .actions {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-shrink:0;
+    }
+    .menu-card .price {
+      font-weight:700;
+      color:#e67e22;
+      font-size:18px;
+      font-variant-numeric:tabular-nums;
+    }
+
+    /* ───────────── BUTTONS ───────────── */
+    .btn-primary {
+      background:linear-gradient(135deg, #1e293b, #2d3a4f);
+      color:#fff;
+      border:none;
+      padding:8px 20px;
+      border-radius:40px;
+      font-size:13px;
+      font-weight:600;
+      cursor:pointer;
+      transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      box-shadow:0 2px 8px rgba(30,41,59,0.08);
+    }
+    .btn-primary:active { transform:scale(0.97); }
+    body.dark .btn-primary { background:linear-gradient(135deg, #e67e22, #f39c12); box-shadow:0 2px 8px rgba(230,126,34,0.15); }
+    .btn-primary:hover { transform:scale(1.04); box-shadow:0 4px 16px rgba(30,41,59,0.12); }
+    .btn-primary:active:hover { transform:scale(0.97); }
+    .btn-primary.small { padding:5px 14px; font-size:12px; }
+    .btn-primary.outline {
+      background:transparent;
+      border:1px solid rgba(0,0,0,0.06);
+      color:#1a1a2e;
+      box-shadow:none;
+    }
+    body.dark .btn-primary.outline {
+      border-color:rgba(255,255,255,0.06);
+      color:#e0e0f0;
+    }
+    .btn-primary.outline:hover { border-color:#e67e22; color:#e67e22; background:rgba(230,126,34,0.04); }
+    .btn-primary.outline:active { transform:scale(0.97); }
+    .btn-danger {
+      background:#e74c3c;
+      color:#fff;
+      border:none;
+      padding:5px 12px;
+      border-radius:40px;
+      font-size:12px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.15s;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+    .btn-danger:hover { background:#c0392b; transform:scale(1.04); }
+    .btn-danger:active { transform:scale(0.97); }
+    .btn-disabled { opacity:0.8; cursor:not-allowed; pointer-events:none; }
+
+    /* ───────────── CART ───────────── */
+    .cart-item {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:12px 0;
+      border-bottom:1px solid rgba(0,0,0,0.04);
+      gap:10px;
+    }
+    body.dark .cart-item { border-bottom-color:rgba(255,255,255,0.04); }
+    .cart-item .details { flex:1; }
+    .cart-item .details h4 {
+      font-family: 'Playfair Display','Noto Sans JP',serif;
+      font-size:17px;
+      font-weight:600;
+      color:#1a1a2e;
+    }
+    body.dark .cart-item .details h4 { color:#f0f0f5; }
+    .cart-item .details p {
+      font-size:12px;
+      color:#8888aa;
+    }
+    .cart-item .qty {
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .cart-item .qty button {
+      background:rgba(0,0,0,0.04);
+      border:none;
+      width:30px;
+      height:30px;
+      border-radius:40px;
+      font-size:16px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.15s;
+      color:#1a1a2e;
+    }
+    body.dark .cart-item .qty button { background:rgba(255,255,255,0.05); color:#e0e0f0; }
+    .cart-item .qty button:hover { background:rgba(230,126,34,0.12); }
+    .cart-item .qty button:active { transform:scale(0.92); }
+    .cart-item .qty span { font-weight:600; min-width:24px; text-align:center; font-variant-numeric:tabular-nums; }
+
+    .cart-footer {
+      position:sticky;
+      bottom:0;
+      background:inherit;
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      padding:16px 0 8px;
+      border-top:1px solid rgba(0,0,0,0.04);
+      margin:0 -4px;
+      z-index:10;
+    }
+    body.dark .cart-footer { border-top-color:rgba(255,255,255,0.04); }
+    .cart-total {
+      display:flex;
+      justify-content:space-between;
+      padding:12px 0 8px;
+      font-size:20px;
+      font-weight:700;
+      font-family: 'Playfair Display','Noto Sans JP',serif;
+    }
+    body.dark .cart-total { color:#f0f0f5; }
+    .cart-total .total-amount {
+      font-variant-numeric:tabular-nums;
+      transition:color 0.2s;
+      display:inline-block;
+    }
+    .cart-summary {
+      background:rgba(0,0,0,0.02);
+      border-radius:16px;
+      padding:12px 16px;
+      margin:8px 0 12px;
+      font-size:14px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    body.dark .cart-summary { background:rgba(255,255,255,0.02); }
+    .cart-summary .row {
+      display:flex;
+      justify-content:space-between;
+      color:#636e72;
+    }
+    body.dark .cart-summary .row { color:#8888aa; }
+    .cart-summary .row.total {
+      font-weight:700;
+      color:#1a1a2e;
+      font-size:16px;
+      border-top:1px solid rgba(0,0,0,0.04);
+      padding-top:8px;
+      margin-top:4px;
+    }
+    body.dark .cart-summary .row.total {
+      color:#f0f0f5;
+      border-top-color:rgba(255,255,255,0.04);
+    }
+    .cart-summary .row .amount { font-variant-numeric:tabular-nums; }
+
+    .checkout-form select,
+    .checkout-form textarea {
+      padding:10px 16px;
+      border:1px solid rgba(0,0,0,0.04);
+      border-radius:40px;
+      font-size:14px;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+      background:rgba(255,255,255,0.3);
+      backdrop-filter:blur(4px);
+      outline:none;
+      transition:0.2s;
+      color:inherit;
+      width:100%;
+    }
+    body.dark .checkout-form select,
+    body.dark .checkout-form textarea {
+      background:rgba(255,255,255,0.04);
+      border-color:rgba(255,255,255,0.04);
+    }
+    .checkout-form select:focus,
+    .checkout-form textarea:focus { border-color:#e67e22; box-shadow:0 0 0 3px rgba(230,126,34,0.06); }
+    .checkout-form textarea { border-radius:20px; resize:vertical; min-height:56px; }
+
+    .empty-state {
+      text-align:center;
+      padding:48px 20px;
+      color:#b2bec3;
+    }
+    .empty-state .emoji { font-size:56px; margin-bottom:12px; opacity:0.9; }
+    .empty-state h3 {
+      font-weight:500;
+      color:#1a1a2e;
+      font-size:20px;
+      font-family: 'Playfair Display','Noto Sans JP',serif;
+    }
+    body.dark .empty-state h3 { color:#e0e0f0; }
+
+    /* ───────────── ORDER HISTORY ───────────── */
+    .order-history-item {
+      background:rgba(255,255,255,0.4);
+      backdrop-filter:blur(4px);
+      border-radius:20px;
+      padding:18px 20px;
+      margin-bottom:16px;
+      border:1px solid rgba(0,0,0,0.03);
+      transition:0.2s;
+    }
+    body.dark .order-history-item { background:rgba(255,255,255,0.02); border-color:rgba(255,255,255,0.03); }
+    .order-history-item .top {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:6px;
+    }
+    .order-history-item .top .id {
+      font-weight:700;
+      font-size:15px;
+      font-family: 'Playfair Display','Noto Sans JP',serif;
+    }
+    .order-history-item .items {
+      font-size:14px;
+      color:#636e72;
+      margin-top:6px;
+    }
+    body.dark .order-history-item .items { color:#8888aa; }
+    .order-history-item .time {
+      font-size:12px;
+      color:#b2bec3;
+      margin-top:4px;
+    }
+    .order-history-item .actions {
+      margin-top:12px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    /* ─── STATUS TIMELINE ─── */
+    .status-timeline {
+      display:flex;
+      align-items:center;
+      gap:4px;
+      margin:12px 0 8px;
+      padding:0 8px;
+      position:relative;
+    }
+    .status-timeline .step {
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      font-size:10px;
+      color:#b2bec3;
+      font-weight:500;
+      position:relative;
+      transition:0.3s;
+      text-align:center;
+    }
+    .status-timeline .step .dot {
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      background:#eef2f6;
+      border:2px solid #d0d5dd;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11px;
+      transition:0.3s;
+      color:#b2bec3;
+    }
+    body.dark .status-timeline .step .dot { background:rgba(255,255,255,0.04); border-color:#444466; }
+    .status-timeline .step.active .dot { background:#e67e22; border-color:#e67e22; color:#fff; box-shadow:0 0 0 4px rgba(230,126,34,0.15); }
+    .status-timeline .step.completed .dot { background:#00b894; border-color:#00b894; color:#fff; }
+    .status-timeline .step .label {
+      font-size:9px;
+      text-transform:uppercase;
+      letter-spacing:0.8px;
+    }
+    .status-timeline .step.active .label { color:#e67e22; font-weight:600; }
+    .status-timeline .step.completed .label { color:#00b894; }
+    .status-timeline .line {
+      flex:1;
+      height:2px;
+      background:#eef2f6;
+      margin:0 -4px;
+      position:relative;
+      top:-10px;
+    }
+    body.dark .status-timeline .line { background:rgba(255,255,255,0.06); }
+    .status-timeline .line .fill {
+      height:100%;
+      background:#e67e22;
+      transition:width 0.5s ease;
+      width:0%;
+    }
+    .status-timeline .line .fill.completed { background:#00b894; }
+
+    /* ─── REVIEW ─── */
+    .review-section {
+      margin-top:12px;
+      padding-top:12px;
+      border-top:1px solid rgba(0,0,0,0.04);
+    }
+    body.dark .review-section { border-top-color:rgba(255,255,255,0.04); }
+    .stars {
+      display:flex;
+      gap:4px;
+      font-size:26px;
+      cursor:pointer;
+    }
+    .stars span { transition:0.15s; color:#d0d5dd; user-select:none; }
+    .stars span.active { color:#f39c12; }
+    .stars span:hover { transform:scale(1.15); }
+
+    /* ───────────── TOAST ───────────── */
+    .toast-container {
+      position:fixed;
+      bottom:24px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:9999;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:center;
+      pointer-events:none;
+      width:90%;
+      max-width:420px;
+    }
+    .toast {
+      background:rgba(26,26,46,0.92);
+      backdrop-filter:blur(12px);
+      color:#fff;
+      padding:14px 20px;
+      border-radius:60px;
+      font-size:14px;
+      font-weight:500;
+      box-shadow:0 12px 40px rgba(0,0,0,0.15);
+      animation:slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events:auto;
+      width:100%;
+      text-align:center;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      position:relative;
+      overflow:hidden;
+    }
+    .toast .toast-content {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      width:100%;
+    }
+    .toast .toast-progress {
+      width:100%;
+      height:2px;
+      background:rgba(255,255,255,0.1);
+      border-radius:4px;
+      overflow:hidden;
+    }
+    .toast .toast-progress .bar {
+      height:100%;
+      background:#e67e22;
+      width:100%;
+      animation:shrinkBar 2.8s linear forwards;
+    }
+    @keyframes shrinkBar {
+      from { width:100%; }
+      to { width:0%; }
+    }
+    body.dark .toast { background:rgba(16,16,32,0.95); }
+    .toast.success { background:rgba(0,184,148,0.92); }
+    .toast.error { background:rgba(231,76,60,0.92); }
+    .toast.success .toast-progress .bar { background:#fff; }
+    .toast.error .toast-progress .bar { background:#fff; }
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(20px) scale(0.95); }
+      to { opacity:1; transform:translateY(0) scale(1); }
+    }
+
+    /* ───────────── MODAL ───────────── */
+    .modal-overlay {
+      position:fixed;
+      top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.5);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      z-index:1000;
+      padding:20px;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity 0.3s;
+    }
+    .modal-overlay.active { opacity:1; pointer-events:auto; }
+    .modal {
+      background:rgba(255,255,255,0.95);
+      backdrop-filter:blur(20px);
+      max-width:440px;
+      width:100%;
+      border-radius:32px;
+      padding:28px 24px;
+      box-shadow:0 40px 100px rgba(0,0,0,0.15);
+      transform:translateY(30px) scale(0.96);
+      transition:transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-height:92vh;
+      overflow-y:auto;
+    }
+    body.dark .modal { background:rgba(20,20,44,0.96); }
+    .modal-overlay.active .modal { transform:translateY(0) scale(1); }
+    .modal h2 {
+      font-family: 'Playfair Display','Noto Sans JP',serif;
+      font-size:24px;
+      font-weight:700;
+      margin-bottom:2px;
+      color:#1a1a2e;
+    }
+    body.dark .modal h2 { color:#f0f0f5; }
+    .modal .sub { color:#8888aa; font-size:14px; margin-bottom:20px; }
+    .modal .option-group { margin-bottom:18px; }
+    .modal .option-group label {
+      font-weight:600;
+      font-size:13px;
+      display:block;
+      margin-bottom:6px;
+      color:#1a1a2e;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+    }
+    body.dark .modal .option-group label { color:#e0e0f0; }
+    .modal .option-group .options {
+      display:flex;
+      background:rgba(0,0,0,0.04);
+      border-radius:40px;
+      padding:3px;
+      gap:2px;
+      border:1px solid rgba(0,0,0,0.02);
+    }
+    body.dark .modal .option-group .options {
+      background:rgba(255,255,255,0.04);
+      border-color:rgba(255,255,255,0.02);
+    }
+    .modal .option-group .opt {
+      flex:1;
+      text-align:center;
+      padding:7px 12px;
+      border-radius:30px;
+      font-size:13px;
+      cursor:pointer;
+      transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-weight:500;
+      color:#636e72;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+      border:none;
+      background:transparent;
+      user-select:none;
+    }
+    body.dark .modal .option-group .opt { color:#a0a0b8; }
+    .modal .option-group .opt.active {
+      background:#1e293b;
+      color:#fff;
+      box-shadow:0 2px 8px rgba(0,0,0,0.04);
+    }
+    body.dark .modal .option-group .opt.active { background:#e67e22; color:#fff; }
+    .modal .option-group .opt:hover { color:#e67e22; }
+    .modal .option-group .opt.active:hover { color:#fff; }
+    .modal .modal-actions {
+      display:flex;
+      gap:10px;
+      margin-top:22px;
+    }
+    .modal .modal-actions button {
+      flex:1;
+      padding:14px;
+      border-radius:40px;
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+      transition:0.15s;
+      font-size:14px;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+    }
+    .modal .modal-actions .cancel {
+      background:rgba(0,0,0,0.04);
+      color:#2d3436;
+    }
+    body.dark .modal .modal-actions .cancel {
+      background:rgba(255,255,255,0.04);
+      color:#d0d0e8;
+    }
+    .modal .modal-actions .cancel:hover { background:rgba(0,0,0,0.08); }
+    .modal .modal-actions .confirm {
+      background:linear-gradient(135deg, #1e293b, #2d3a4f);
+      color:#fff;
+    }
+    body.dark .modal .modal-actions .confirm { background:linear-gradient(135deg, #e67e22, #f39c12); }
+    .modal .modal-actions .confirm:hover { transform:scale(1.03); }
+    .modal .modal-actions .confirm:active { transform:scale(0.97); }
+
+    /* ───────────── ADMIN ───────────── */
+    .stats-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr 1fr;
+      gap:10px;
+      margin-bottom:20px;
+    }
+    @media (max-width:460px) { .stats-grid { grid-template-columns:1fr 1fr; } }
+    .stat-box {
+      background:rgba(255,255,255,0.4);
+      backdrop-filter:blur(4px);
+      border-radius:18px;
+      padding:14px 10px;
+      text-align:center;
+      border:1px solid rgba(0,0,0,0.02);
+      position:relative;
+      overflow:hidden;
+    }
+    body.dark .stat-box { background:rgba(255,255,255,0.04); border-color:rgba(255,255,255,0.02); }
+    .stat-box .number {
+      font-size:26px;
+      font-weight:700;
+      color:#1a1a2e;
+      font-family: 'Playfair Display','Noto Sans JP',serif;
+      font-variant-numeric:tabular-nums;
+    }
+    body.dark .stat-box .number { color:#f0f0f5; }
+    .stat-box .number.orange { color:#e67e22; }
+    .stat-box .label {
+      font-size:11px;
+      color:#8888aa;
+      margin-top:4px;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+      text-transform:uppercase;
+      letter-spacing:0.8px;
+    }
+    body.dark .stat-box .label { color:#aaaaaa; }
+    .stat-box .sparkline {
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      gap:2px;
+      height:20px;
+      margin-top:6px;
+    }
+    .stat-box .sparkline .bar {
+      width:4px;
+      border-radius:2px 2px 0 0;
+      background:linear-gradient(180deg, #e67e22, #f39c12);
+      transition:height 0.5s ease;
+    }
+    body.dark .stat-box .sparkline .bar { opacity:0.6; }
+
+    .admin-section-title {
+      font-size:17px;
+      font-weight:600;
+      margin:20px 0 12px;
+      font-family: 'Playfair Display','Noto Sans JP',serif;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    body.dark .admin-section-title { color:#f0f0f5; }
+
+    .admin-filter {
+      display:flex;
+      gap:8px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+    .admin-filter button {
+      background:rgba(0,0,0,0.04);
+      border:none;
+      padding:5px 16px;
+      border-radius:40px;
+      font-size:12px;
+      font-weight:500;
+      cursor:pointer;
+      transition:0.2s;
+      color:#636e72;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+    }
+    body.dark .admin-filter button { background:rgba(255,255,255,0.04); color:#aaaaaa; }
+    .admin-filter button.active { background:#e67e22; color:#fff; }
+    .admin-filter button:hover { background:#e67e22; color:#fff; }
+
+    .admin-order-table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+      background:rgba(255,255,255,0.2);
+      backdrop-filter:blur(4px);
+      border-radius:16px;
+      overflow:hidden;
+    }
+    body.dark .admin-order-table { background:rgba(255,255,255,0.02); }
+    .admin-order-table th {
+      text-align:left;
+      padding:10px 14px;
+      background:rgba(0,0,0,0.02);
+      font-weight:600;
+      color:#636e72;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.8px;
+    }
+    body.dark .admin-order-table th { background:rgba(255,255,255,0.02); color:#aaaaaa; }
+    .admin-order-table td {
+      padding:10px 14px;
+      border-bottom:1px solid rgba(0,0,0,0.02);
+      vertical-align:middle;
+      color:inherit;
+    }
+    body.dark .admin-order-table td { border-bottom-color:rgba(255,255,255,0.02); }
+    .admin-order-table .status-badge {
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      padding:3px 12px;
+      border-radius:40px;
+      font-size:11px;
+      font-weight:600;
+      background:#eef2f6;
+      color:#2d3436;
+    }
+    body.dark .admin-order-table .status-badge { background:rgba(255,255,255,0.04); color:#d0d0e8; }
+    .admin-order-table .status-badge.received { background:#f39c1215; color:#f39c12; }
+    .admin-order-table .status-badge.preparing { background:#3498db15; color:#3498db; }
+    .admin-order-table .status-badge.ready { background:#00b89415; color:#00b894; }
+    .admin-order-table .btn-action {
+      background:transparent;
+      border:1px solid rgba(0,0,0,0.04);
+      padding:4px 12px;
+      border-radius:40px;
+      font-size:11px;
+      cursor:pointer;
+      transition:0.2s;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      color:#1a1a2e;
+    }
+    body.dark .admin-order-table .btn-action { border-color:rgba(255,255,255,0.04); color:#d0d0e8; }
+    .admin-order-table .btn-action:hover { background:#e67e22; color:#fff; border-color:#e67e22; }
+    .admin-order-table .btn-action:disabled { opacity:0.4; cursor:not-allowed; pointer-events:none; }
+    .admin-order-table .customer-name { font-weight:600; }
+    .admin-order-table .order-time { font-size:11px; color:#b2bec3; }
+    body.dark .admin-order-table .order-time { color:#8888aa; }
+
+    .menu-mgmt-item {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:10px 0;
+      border-bottom:1px solid rgba(0,0,0,0.04);
+      gap:10px;
+    }
+    body.dark .menu-mgmt-item { border-bottom-color:rgba(255,255,255,0.04); }
+    .menu-mgmt-item .info h4 {
+      font-family: 'Playfair Display','Noto Sans JP',serif;
+      font-size:16px;
+      font-weight:600;
+      color:#1a1a2e;
+    }
+    body.dark .menu-mgmt-item .info h4 { color:#f0f0f5; }
+    .menu-mgmt-item .info p {
+      font-size:12px;
+      color:#8888aa;
+    }
+    body.dark .menu-mgmt-item .info p { color:#aaaaaa; }
+
+    .add-menu-form {
+      background:rgba(255,255,255,0.3);
+      backdrop-filter:blur(4px);
+      border-radius:20px;
+      padding:18px;
+      margin-bottom:16px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    body.dark .add-menu-form { background:rgba(255,255,255,0.02); }
+    .add-menu-form input {
+      padding:10px 16px;
+      border:1px solid rgba(0,0,0,0.04);
+      border-radius:40px;
+      font-size:13px;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+      background:rgba(255,255,255,0.3);
+      outline:none;
+      transition:0.2s;
+      color:inherit;
+    }
+    body.dark .add-menu-form input {
+      background:rgba(255,255,255,0.04);
+      border-color:rgba(255,255,255,0.04);
+    }
+    .add-menu-form input:focus { border-color:#e67e22; box-shadow:0 0 0 3px rgba(230,126,34,0.04); }
+    .add-menu-form .full-width { grid-column:span 2; }
+    @media (max-width:460px) {
+      .add-menu-form { grid-template-columns:1fr; }
+      .add-menu-form .full-width { grid-column:span 1; }
+    }
+    .add-menu-form button {
+      grid-column:span 2;
+      padding:12px;
+      background:linear-gradient(135deg, #1e293b, #2d3a4f);
+      color:#fff;
+      border:none;
+      border-radius:40px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.15s;
+      font-size:14px;
+      font-family: 'Inter','Noto Sans JP',sans-serif;
+    }
+    body.dark .add-menu-form button { background:linear-gradient(135deg, #e67e22, #f39c12); }
+    .add-menu-form button:active { transform:scale(0.97); }
+    @media (max-width:460px) { .add-menu-form button { grid-column:span 1; } }
+
+    .report-chart {
+      background:rgba(255,255,255,0.3);
+      backdrop-filter:blur(4px);
+      border-radius:20px;
+      padding:20px;
+      margin-top:6px;
+    }
+    body.dark .report-chart { background:rgba(255,255,255,0.02); }
+    .report-chart .chart-bars {
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-around;
+      height:110px;
+      gap:8px;
+      margin-top:12px;
+    }
+    .chart-bar {
+      flex:1;
+      background:linear-gradient(180deg, #e67e22, #f39c12);
+      border-radius:6px 6px 3px 3px;
+      min-height:8px;
+      transition:height 0.5s ease;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-end;
+      color:#fff;
+      font-size:9px;
+      font-weight:600;
+      padding-top:4px;
+      position:relative;
+    }
+    .chart-bar .day {
+      margin-top:6px;
+      font-size:10px;
+      color:#8888aa;
+      font-weight:500;
+      position:absolute;
+      bottom:-20px;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+    }
+    body.dark .chart-bar .day { color:#aaaaaa; }
+
+    .hidden { display:none !important; }
+
+    /* ─── CONFETTI ─── */
+    .confetti-container {
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+      z-index:9998;
+      overflow:hidden;
+    }
+    .confetti-piece {
+      position:absolute;
+      width:10px;
+      height:10px;
+      opacity:0;
+      animation:confettiFall 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes confettiFall {
+      0% { opacity:1; transform:translateY(-20px) rotate(0deg) scale(0.5); }
+      100% { opacity:0; transform:translateY(90vh) rotate(720deg) scale(1.2); }
+    }
+
+    @media (max-width:460px) {
+      .app-header { padding:14px 16px 10px; }
+      .logo { font-size:24px; }
+      .logo small { font-size:8px; }
+      .main { padding:12px 16px 16px; }
+      .menu-card { padding:14px; }
+      .menu-card .food-icon { width:40px; height:40px; font-size:28px; }
+      .menu-card .info h4 { font-size:16px; }
+      .btn-primary { padding:6px 14px; font-size:12px; }
+      .modal { padding:20px 16px; }
+      .banner h2 { font-size:22px; }
+      .admin-order-table { display:block; overflow-x:auto; white-space:nowrap; }
+      .admin-order-table th, .admin-order-table td { padding:6px 10px; font-size:11px; }
+      .stats-grid { grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── ONIGIRAZU BACKGROUND ─── -->
+  <div class="onigirazu-bg" id="oniBg"></div>
+
+  <div class="app shadow-xl" id="app">
+
+    <header class="app-header">
+      <div class="logo">MOMENT<span>U</span> <small>pre-order</small></div>
+      <div class="header-controls">
+        <button class="theme-btn" id="themeToggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="lang-btn active" data-lang="en" id="langEn" aria-label="English">EN</button>
+        <button class="lang-btn" data-lang="ja" id="langJa" aria-label="日本語">日本語</button>
+      </div>
+    </header>
+
+    <div style="padding:2px 20px 0;display:flex;justify-content:flex-end;">
+      <div class="role-toggle" id="roleToggle">
+        <button class="active" data-role="user"><i class="fas fa-user-graduate"></i> Student</button>
+        <button data-role="admin"><i class="fas fa-user-cog"></i> Admin</button>
+      </div>
+    </div>
+
+    <div class="main" id="mainContent">
+
+      <!-- USER VIEW -->
+      <div id="userView">
+        <div class="banner shadow-md" id="banner">
+          <div class="banner-bg"></div>
+          <div class="flash">🔥 <span data-key="flash">Flash Sale</span></div>
+          <h2 id="bannerTitle">ランチ、あなたのスタイルで。</h2>
+          <p id="bannerSub">カスタムおにぎらず ¥300～・5分で準備</p>
+          <button class="btn-order-now" id="bannerBtn"><i class="fas fa-shopping-bag"></i> 今すぐ注文</button>
+        </div>
+
+        <!-- RECOMMENDED CAROUSEL -->
+        <div class="recommended-section">
+          <div class="section-label"><span class="gold">✦</span> <span data-key="recommended">Recommended for you</span></div>
+          <div class="carousel" id="recommendedCarousel">
+            <!-- Dynamic from JS -->
+          </div>
+        </div>
+
+        <div class="search-row">
+          <input type="text" id="searchInput" data-key="searchPlaceholder" placeholder="" aria-label="Search menu" />
+          <div class="view-toggle" role="group" aria-label="View toggle">
+            <button class="active" data-view="list" id="viewList" aria-label="List view"><i class="fas fa-list"></i></button>
+            <button data-view="grid" id="viewGrid" aria-label="Grid view"><i class="fas fa-th"></i></button>
+          </div>
+        </div>
+        <div class="filter-group" id="filterGroup" role="group" aria-label="Filter by tags">
+          <span class="filter-tag active" data-tag="all"><i class="fas fa-utensils"></i> All</span>
+          <span class="filter-tag" data-tag="spicy"><i class="fas fa-pepper-hot"></i> Spicy</span>
+          <span class="filter-tag" data-tag="vegan"><i class="fas fa-seedling"></i> Vegan</span>
+          <span class="filter-tag" data-tag="seafood"><i class="fas fa-fish"></i> Seafood</span>
+          <span class="filter-tag" data-tag="chicken"><i class="fas fa-drumstick-bite"></i> Chicken</span>
+          <span class="filter-tag" data-tag="premium"><i class="fas fa-crown"></i> Premium</span>
+          <span class="filter-tag" data-tag="custom"><i class="fas fa-plus-circle"></i> Custom</span>
+        </div>
+
+        <div class="tabs" id="userTabs" role="tablist">
+          <button class="active" data-tab="menu" role="tab" aria-selected="true"><i class="fas fa-utensils"></i> <span data-key="tabMenu">Menu</span></button>
+          <button data-tab="cart" role="tab" aria-selected="false"><i class="fas fa-shopping-cart"></i> <span data-key="tabCart">Cart</span> <span class="badge" id="cartCount">0</span></button>
+          <button data-tab="orders" role="tab" aria-selected="false"><i class="fas fa-clipboard-list"></i> <span data-key="tabOrders">Orders</span></button>
+        </div>
+
+        <div id="tabMenu" class="tab-content visible" role="tabpanel"><div class="menu-grid list" id="menuGrid"></div></div>
+        <div id="tabCart" class="tab-content hidden" role="tabpanel"><div id="cartContent"></div></div>
+        <div id="tabOrders" class="tab-content hidden" role="tabpanel"><div id="ordersList"></div></div>
+      </div>
+
+      <!-- ADMIN VIEW -->
+      <div id="adminView" class="hidden">
+        <div class="tabs" id="adminTabs" role="tablist">
+          <button class="active" data-atab="dashboard" role="tab" aria-selected="true"><i class="fas fa-chart-pie"></i> <span data-key="aDash">Dashboard</span></button>
+          <button data-atab="menu-mgmt" role="tab" aria-selected="false"><i class="fas fa-edit"></i> <span data-key="aMenu">Menu</span></button>
+          <button data-atab="reports" role="tab" aria-selected="false"><i class="fas fa-chart-bar"></i> <span data-key="aReports">Reports</span></button>
+        </div>
+        <div id="aTabDashboard" class="atab-content">
+          <div class="stats-grid" id="adminStats"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; flex-wrap:wrap; gap:8px;">
+            <div class="admin-section-title" style="margin:0;">
+              <i class="fas fa-tasks"></i> <span data-key="aLiveOrders">📋 Live Orders</span>
+            </div>
+            <button class="btn-danger" id="clearOrdersBtn" style="padding:6px 18px; font-size:13px;">
+              <i class="fas fa-trash-alt"></i> Clear All Orders
+            </button>
+          </div>
+          <div class="admin-filter" id="adminFilter" role="group" aria-label="Filter orders by status">
+            <button class="active" data-afilter="all">All</button>
+            <button data-afilter="received"><i class="fas fa-clock"></i> Received</button>
+            <button data-afilter="preparing"><i class="fas fa-fire"></i> Preparing</button>
+            <button data-afilter="ready"><i class="fas fa-check-circle"></i> Ready</button>
+          </div>
+          <div id="adminOrderList"></div>
+        </div>
+        <div id="aTabMenuMgmt" class="atab-content hidden">
+          <div class="admin-section-title"><i class="fas fa-plus-circle"></i> <span data-key="aAddItem">Add new item</span></div>
+          <div class="add-menu-form" id="addMenuForm">
+            <input type="text" id="newName" data-key="addNamePlaceholder" placeholder="" aria-label="Item name" />
+            <input type="text" id="newPrice" data-key="addPricePlaceholder" placeholder="" aria-label="Price" />
+            <input type="text" id="newDesc" data-key="addDescPlaceholder" placeholder="" class="full-width" aria-label="Description" />
+            <input type="text" id="newTags" data-key="addTagsPlaceholder" placeholder="" class="full-width" aria-label="Tags" />
+            <button id="addMenuBtn"><i class="fas fa-plus"></i> <span data-key="aAddBtn">Add to Menu</span></button>
+          </div>
+          <div class="admin-section-title"><i class="fas fa-list-ul"></i> <span data-key="aCurrentMenu">Current Menu</span></div>
+          <div id="menuMgmtList"></div>
+          <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn-danger" id="resetMenuBtn" style="padding:8px 20px; font-size:13px;">
+              <i class="fas fa-undo-alt"></i> Reset to Default Menu
+            </button>
+          </div>
+        </div>
+        <div id="aTabReports" class="atab-content hidden">
+          <div class="admin-section-title"><i class="fas fa-chart-line"></i> <span data-key="aRevenue">Revenue &amp; Popularity</span></div>
+          <div class="report-chart" id="reportChart">
+            <div style="display:flex;justify-content:space-between;font-size:13px;flex-wrap:wrap;gap:4px;">
+              <span><span data-key="aLastDays">Last 5 days</span></span>
+              <span><span data-key="aTotal">Total</span>: ¥<span id="reportTotal">0</span></span>
+            </div>
+            <div class="chart-bars" id="chartBars"></div>
+            <!-- FIX: bỏ inline color để dark mode tự động đổi -->
+            <div style="margin-top:20px;font-weight:600;font-family:'Playfair Display','Noto Sans JP',serif;font-size:17px;">
+              🥇 <span data-key="aTopSelling">Top selling items</span>
+            </div>
+            <div id="topItemsList" style="margin-top:8px;font-size:14px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<!-- ─── MODAL ─── -->
+<div class="modal-overlay" id="customModal">
+  <div class="modal shadow-xl" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle"><i class="fas fa-pencil-alt" style="color:#e67e22;"></i> <span data-key="modalTitle">Customize your onigirazu</span></h2>
+    <p class="sub" id="modalItemName">Spicy Tuna</p>
+
+    <div class="option-group">
+      <label data-key="optRice"><i class="fas fa-seedling"></i> Rice</label>
+      <div class="options" id="optRice" role="group" aria-label="Rice options">
+        <span class="opt active" data-value="White" role="button" tabindex="0">🍚 White</span>
+        <span class="opt" data-value="Brown" role="button" tabindex="0">🍚 Brown</span>
+        <span class="opt" data-value="Mixed" role="button" tabindex="0">🍚 Mixed</span>
+      </div>
+    </div>
+
+    <div class="option-group">
+      <label data-key="optProtein"><i class="fas fa-drumstick-bite"></i> Protein</label>
+      <div class="options" id="optProtein" role="group" aria-label="Protein options">
+        <span class="opt active" data-value="Tuna" role="button" tabindex="0">🐟 Tuna</span>
+        <span class="opt" data-value="Chicken" role="button" tabindex="0">🐔 Chicken</span>
+        <span class="opt" data-value="Tofu" role="button" tabindex="0">🌱 Tofu</span>
+      </div>
+    </div>
+
+    <div class="option-group">
+      <label data-key="optSauce"><i class="fas fa-flask"></i> Sauce</label>
+      <div class="options" id="optSauce" role="group" aria-label="Sauce options">
+        <span class="opt active" data-value="Sriracha" role="button" tabindex="0">🌶️ Sriracha</span>
+        <span class="opt" data-value="Mayo" role="button" tabindex="0">🥄 Mayo</span>
+        <span class="opt" data-value="Teriyaki" role="button" tabindex="0">🍯 Teriyaki</span>
+        <span class="opt" data-value="None" role="button" tabindex="0">🚫 None</span>
+      </div>
+    </div>
+
+    <div class="option-group">
+      <label data-key="optAddons"><i class="fas fa-plus-circle"></i> Add-ons (click to toggle)</label>
+      <div class="options" id="optAddons" role="group" aria-label="Add-ons options">
+        <span class="opt" data-value="Avocado" role="button" tabindex="0">🥑 Avocado</span>
+        <span class="opt" data-value="Sesame" role="button" tabindex="0">🌾 Sesame</span>
+        <span class="opt" data-value="Kimchi" role="button" tabindex="0">🥬 Kimchi</span>
+        <span class="opt" data-value="Cheese" role="button" tabindex="0">🧀 Cheese</span>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="cancel" id="modalCancel" data-key="modalCancel"><i class="fas fa-times"></i> Cancel</button>
+      <button class="confirm" id="modalConfirm" data-key="modalConfirm"><i class="fas fa-cart-plus"></i> Add to cart</button>
+    </div>
+  </div>
+</div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // ────────────────────────────────────────────────────────
+    // DATA
+    // ────────────────────────────────────────────────────────
+    // Chỉ giữ lại các món onigirazu, đã xóa Katsu Curry
+    const MENU_DEFAULT = [
+      { id:1, name:'Spicy Tuna', price:350, description:'with avocado & sriracha', tags:['spicy','seafood'], emoji:'🍣', badge:'Best Seller' },
+      { id:2, name:'Teriyaki Chicken', price:400, description:'grilled with sesame', tags:['chicken','teriyaki'], emoji:'🍗', badge:'' },
+      { id:3, name:'Veggie Rainbow', price:300, description:'fresh & healthy', tags:['vegan','healthy'], emoji:'🥗', badge:'Chef\'s Pick' },
+      { id:4, name:'Salmon Miso', price:420, description:'miso-glazed salmon', tags:['seafood','premium'], emoji:'🐟', badge:'Premium' },
+    ];
+
+    let menuItems = [];
+    let nextItemId = 6;
+    let cart = [];
+    let cartItemIdCounter = 0;
+    let orders = [];
+    let nextOrderId = 100;
+    let modalTargetItemId = null;
+    let modalSelected = { rice:'White', protein:'Tuna', sauce:'Sriracha', addons:[] };
+    let currentLang = 'en';
+    let currentView = 'list';
+    let currentFilter = 'all';
+    let searchQuery = '';
+    let adminFilter = 'all';
+
+    // ────────────────────────────────────────────────────────
+    // LOCAL STORAGE
+    // ────────────────────────────────────────────────────────
+    function saveData(){
+      try {
+        localStorage.setItem('momentu_menu', JSON.stringify(menuItems));
+        localStorage.setItem('momentu_cart', JSON.stringify(cart));
+        localStorage.setItem('momentu_orders', JSON.stringify(orders));
+        localStorage.setItem('momentu_nextItemId', String(nextItemId));
+        localStorage.setItem('momentu_nextOrderId', String(nextOrderId));
+        localStorage.setItem('momentu_cartItemIdCounter', String(cartItemIdCounter));
+      } catch(e) { /* ignore */ }
+    }
+
+    // Hàm reset menu về mặc định
+    function resetMenuToDefault() {
+      menuItems = JSON.parse(JSON.stringify(MENU_DEFAULT));
+      // Xóa các món trong cart không còn tồn tại
+      cart = cart.filter(c => menuItems.some(m => m.id === c.menuItemId));
+      nextItemId = Math.max(...menuItems.map(m => m.id)) + 1;
+      saveData();
+      renderMenu(); renderMenuManagement(); renderCart(); renderRecommended();
+      toast('Menu has been reset to default.', 'success');
+    }
+
+    function loadData(){
+      try {
+        const menu = localStorage.getItem('momentu_menu');
+        const cartData = localStorage.getItem('momentu_cart');
+        const ordersData = localStorage.getItem('momentu_orders');
+        const nId = localStorage.getItem('momentu_nextItemId');
+        const nOId = localStorage.getItem('momentu_nextOrderId');
+        const cId = localStorage.getItem('momentu_cartItemIdCounter');
+        if(menu) {
+          menuItems = JSON.parse(menu);
+          // Loại bỏ món Katsu Curry nếu có (cả tên đúng và sai chính tả)
+          menuItems = menuItems.filter(item => 
+            item.name.toLowerCase() !== 'katsu curry' && 
+            item.name.toLowerCase() !== 'kalsu curry'
+          );
+          // Nếu menu bị lọc ra ít hơn 4 món, reset về default
+          if(menuItems.length < 4) {
+            menuItems = JSON.parse(JSON.stringify(MENU_DEFAULT));
+          }
+        } else {
+          menuItems = JSON.parse(JSON.stringify(MENU_DEFAULT));
+        }
+        if(cartData) cart = JSON.parse(cartData);
+        if(ordersData) orders = JSON.parse(ordersData);
+        if(nId) nextItemId = parseInt(nId);
+        if(nOId) nextOrderId = parseInt(nOId);
+        if(cId) cartItemIdCounter = parseInt(cId);
+      } catch(e) { 
+        menuItems = JSON.parse(JSON.stringify(MENU_DEFAULT));
+      }
+    }
+
+    // ────────────────────────────────────────────────────────
+    // TRANSLATIONS
+    // ────────────────────────────────────────────────────────
+    const translations = {
+      en: {
+        flash:'Flash Sale', tabMenu:'Menu', tabCart:'Cart', tabOrders:'Orders',
+        aDash:'Dashboard', aMenu:'Menu', aReports:'Reports', aLiveOrders:'📋 Live Orders',
+        aAddItem:'Add new item', aAddBtn:'Add to Menu', aCurrentMenu:'Current Menu',
+        aRevenue:'Revenue & Popularity', aLastDays:'Last 5 days', aTotal:'Total', aTopSelling:'Top selling items',
+        modalTitle:'Customize your onigirazu', optRice:'Rice', optProtein:'Protein', optSauce:'Sauce',
+        optAddons:'Add-ons (click to toggle)', modalCancel:'Cancel', modalConfirm:'Add to cart',
+        toastAdded:'Added to cart!', toastEmpty:'Cart is empty!',
+        toastOrderPlaced:'✅ Order placed! Your onigirazu will be ready soon.',
+        toastItemDeleted:'Item deleted.', toastAddedMenu:'Added "%s" to menu!',
+        toastFillFields:'Please fill in name and valid price.',
+        toastStatusUpdated:'Order #%s status updated to %s',
+        toastReviewSubmitted:'⭐ Thanks for your review!',
+        toastReviewUpdated:'🔄 Review updated!',
+        toastSelectRating:'Please select a rating!',
+        toastNewOrder:'🛎️ New order! Check Admin Dashboard.',
+        toastCartCleaned:'Removed unavailable items from cart.',
+        toastReadyCelebration:'🎉 Order is ready for pickup!',
+        emptyCart:'Your cart is empty', emptyCartSub:'Go to Menu and customize your onigirazu!',
+        emptyOrders:'No orders yet', emptyOrdersSub:'Place your first order from the menu!',
+        emptyMenu:'No items yet', emptyMenuSub:'Check back later!',
+        emptyAdminOrders:'No orders yet.', checkout:'Proceed to Checkout',
+        readyPickup:'Ready for pickup', orderAgain:'Order again',
+        reviewTitle:'Rate your meal', reviewPlaceholder:'How was it? (optional)',
+        submitReview:'Submit review', choosePickup:'Pickup time', note:'Special notes (optional)',
+        noReview:'Not reviewed yet.', customer:'Customer', items:'Items', qty:'Qty', total:'Total',
+        status:'Status', time:'Time', action:'Action', acceptPrint:'Accept & Print',
+        newOrder:'New Order', pending:'Pending...',
+        statusReceived:'Received', statusPreparing:'Preparing', statusReady:'Ready',
+        filterAll:'All', filterReceived:'Received', filterPreparing:'Preparing', filterReady:'Ready',
+        editReview:'Edit review', updateReview:'Update review',
+        recommended:'Recommended for you',
+        searchPlaceholder:'🔍 Search menu...',
+        addNamePlaceholder:'Item name',
+        addPricePlaceholder:'Price (¥)',
+        addDescPlaceholder:'Description',
+        addTagsPlaceholder:'Tags (comma)',
+        orderNotePlaceholder:'Special notes (optional)',
+        reviewPlaceholderInput:'How was it? (optional)',
+        resetMenu:'Reset to Default Menu',
+        menuResetSuccess:'Menu has been reset to default.',
+      },
+      ja: {
+        flash:'フラッシュセール', tabMenu:'メニュー', tabCart:'カート', tabOrders:'注文履歴',
+        aDash:'ダッシュボード', aMenu:'メニュー管理', aReports:'レポート',
+        aLiveOrders:'📋 ライブオーダー', aAddItem:'新商品を追加', aAddBtn:'メニューに追加',
+        aCurrentMenu:'現在のメニュー', aRevenue:'売上・人気ランキング',
+        aLastDays:'過去5日間', aTotal:'合計', aTopSelling:'トップ販売アイテム',
+        modalTitle:'おにぎらずをカスタマイズ', optRice:'ご飯', optProtein:'タンパク質',
+        optSauce:'ソース', optAddons:'トッピング (クリックで選択)',
+        modalCancel:'キャンセル', modalConfirm:'カートに追加',
+        toastAdded:'カートに追加しました！', toastEmpty:'カートは空です！',
+        toastOrderPlaced:'✅ 注文完了！おにぎらずがまもなく出来上がります。',
+        toastItemDeleted:'アイテムを削除しました。',
+        toastAddedMenu:'「%s」をメニューに追加しました！',
+        toastFillFields:'名前と有効な価格を入力してください。',
+        toastStatusUpdated:'注文 #%s のステータスを %s に更新しました',
+        toastReviewSubmitted:'⭐ レビューありがとうございます！',
+        toastReviewUpdated:'🔄 レビューを更新しました！',
+        toastSelectRating:'評価を選択してください！',
+        toastNewOrder:'🛎️ 新規注文！管理者ダッシュボードをご確認ください。',
+        toastCartCleaned:'利用できない商品をカートから削除しました。',
+        toastReadyCelebration:'🎉 注文が受け取り可能になりました！',
+        emptyCart:'カートは空です', emptyCartSub:'メニューからおにぎらずをカスタマイズしましょう！',
+        emptyOrders:'注文履歴がありません', emptyOrdersSub:'メニューから最初の注文をしてください！',
+        emptyMenu:'メニューがありません', emptyMenuSub:'後でもう一度チェックしてください！',
+        emptyAdminOrders:'注文はまだありません。', checkout:'レジへ進む',
+        readyPickup:'受け取り可能', orderAgain:'もう一度注文',
+        reviewTitle:'食事を評価する', reviewPlaceholder:'いかがでしたか？ (任意)',
+        submitReview:'レビューを送信', choosePickup:'受け取り時間', note:'特別な注意事項 (任意)',
+        noReview:'まだレビューはありません。', customer:'お客様', items:'商品', qty:'数量',
+        total:'合計', status:'ステータス', time:'時間', action:'操作',
+        acceptPrint:'受付・印刷', newOrder:'新規注文', pending:'保留中...',
+        statusReceived:'受付済み', statusPreparing:'準備中', statusReady:'受け取り可能',
+        filterAll:'すべて', filterReceived:'受付済み', filterPreparing:'準備中', filterReady:'受け取り可能',
+        editReview:'レビューを編集', updateReview:'レビューを更新',
+        recommended:'あなたにおすすめ',
+        searchPlaceholder:'🔍 メニューを探す...',
+        addNamePlaceholder:'商品名',
+        addPricePlaceholder:'価格 (¥)',
+        addDescPlaceholder:'説明',
+        addTagsPlaceholder:'タグ (カンマ区切り)',
+        orderNotePlaceholder:'特別な注意事項 (任意)',
+        reviewPlaceholderInput:'いかがでしたか？ (任意)',
+        resetMenu:'デフォルトメニューに戻す',
+        menuResetSuccess:'メニューがデフォルトにリセットされました。',
+      }
+    };
+
+    function t(key,...args){
+      let str = translations[currentLang]?.[key] || translations.en[key] || key;
+      if(args.length) str = str.replace(/%s/g, () => args.shift());
+      return str;
+    }
+
+    function updateLangUI(){
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.dataset.key;
+        if(key) el.textContent = t(key);
+      });
+      // Update placeholders for inputs
+      document.querySelectorAll('input[data-key], textarea[data-key]').forEach(el => {
+        const key = el.dataset.key;
+        if(key) el.placeholder = t(key);
+      });
+
+      document.getElementById('bannerTitle').textContent = currentLang==='ja' ? 'ランチ、あなたのスタイルで。' : 'Lunch, your way.';
+      document.getElementById('bannerSub').textContent = currentLang==='ja' ? 'カスタムおにぎらず ¥300～・5分で準備' : 'Custom onigirazu from ¥300 · ready in 5 min';
+      document.getElementById('bannerBtn').innerHTML = currentLang==='ja' ? '<i class="fas fa-shopping-bag"></i> 今すぐ注文' : '<i class="fas fa-shopping-bag"></i> Order Now';
+      renderMenu(); renderCart(); renderOrders(); renderAdminDashboard(); renderMenuManagement(); renderReports();
+      renderRecommended();
+    }
+
+    // ────────────────────────────────────────────────────────
+    // DOM REFS
+    // ────────────────────────────────────────────────────────
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+    const menuGrid = $('#menuGrid'), cartContent = $('#cartContent'), ordersList = $('#ordersList'), cartCount = $('#cartCount');
+    const userTabs = $('#userTabs'), tabMenu = $('#tabMenu'), tabCart = $('#tabCart'), tabOrders = $('#tabOrders');
+    const adminStats = $('#adminStats'), adminOrderList = $('#adminOrderList'), menuMgmtList = $('#menuMgmtList');
+    const reportTotal = $('#reportTotal'), chartBars = $('#chartBars'), topItemsList = $('#topItemsList');
+    const modalOverlay = $('#customModal'), modalItemName = $('#modalItemName');
+    const optRice = $('#optRice'), optProtein = $('#optProtein'), optSauce = $('#optSauce'), optAddons = $('#optAddons');
+    const modalCancel = $('#modalCancel'), modalConfirm = $('#modalConfirm');
+    const roleToggle = $('#roleToggle'), userView = $('#userView'), adminView = $('#adminView');
+    const adminTabs = $('#adminTabs'), aTabDashboard = $('#aTabDashboard'), aTabMenuMgmt = $('#aTabMenuMgmt'), aTabReports = $('#aTabReports');
+    const addMenuBtn = $('#addMenuBtn'), newName = $('#newName'), newPrice = $('#newPrice'), newDesc = $('#newDesc'), newTags = $('#newTags');
+    const themeToggle = $('#themeToggle'), langEn = $('#langEn'), langJa = $('#langJa');
+    const searchInput = $('#searchInput'), filterGroup = $('#filterGroup'), viewList = $('#viewList'), viewGrid = $('#viewGrid'), bannerBtn = $('#bannerBtn'), adminFilterEl = $('#adminFilter');
+    const recommendedCarousel = $('#recommendedCarousel');
+    const resetMenuBtn = $('#resetMenuBtn');
+
+    // ────────────────────────────────────────────────────────
+    // UTILITY
+    // ────────────────────────────────────────────────────────
+    function toast(msg, type='info', duration=2800){
+      const container = $('#toastContainer');
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.innerHTML = `<div class="toast-content">${msg}</div><div class="toast-progress"><div class="bar"></div></div>`;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(10px)';
+        setTimeout(() => el.remove(), 300);
+      }, duration);
+    }
+
+    function generateId(){ return nextOrderId++; }
+    function getItemById(id){ return menuItems.find(i => i.id === id); }
+    function getCartTotal(){ return cart.reduce((sum, item) => sum + item.basePrice * item.quantity, 0); }
+    function getCartCount(){ return cart.reduce((sum, item) => sum + item.quantity, 0); }
+    function formatCurrency(amount){ return '¥' + amount; }
+
+    function getFilteredItems(){
+      let items = menuItems;
+      if(searchQuery){
+        const q = searchQuery.toLowerCase();
+        items = items.filter(i => i.name.toLowerCase().includes(q) || i.description.toLowerCase().includes(q));
+      }
+      if(currentFilter !== 'all'){
+        items = items.filter(i => i.tags.includes(currentFilter));
+      }
+      return items;
+    }
+
+    function getFinalTotal(){
+      const subtotal = getCartTotal();
+      const discount = subtotal > 1000 ? 100 : 0;
+      return subtotal - discount;
+    }
+
+    // ─── COUNT-UP ANIMATION ───
+    function animateNumber(el, target, duration=500){
+      const start = parseInt(el.textContent.replace(/[¥,]/g,'')) || 0;
+      const diff = target - start;
+      const startTime = performance.now();
+      function update(currentTime){
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const current = Math.round(start + diff * easeOutCubic(progress));
+        el.textContent = formatCurrency(current);
+        if(progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    }
+    function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+
+    // ─── CONFETTI ───
+    function fireConfetti() {
+      const container = document.createElement('div');
+      container.className = 'confetti-container';
+      document.body.appendChild(container);
+      const colors = ['#e67e22', '#f39c12', '#2ecc71', '#3498db', '#e74c3c', '#9b59b6', '#1abc9c', '#f4d58d'];
+      for(let i=0; i<60; i++){
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        const size = 6 + Math.random() * 10;
+        const left = Math.random() * 100;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const delay = Math.random() * 0.4;
+        const duration = 0.8 + Math.random() * 0.6;
+        piece.style.cssText = `left:${left}%;width:${size}px;height:${size}px;background:${color};border-radius:${Math.random()>0.5?'50%':'2px'};animation-delay:${delay}s;animation-duration:${duration}s;`;
+        container.appendChild(piece);
+      }
+      setTimeout(() => container.remove(), 2500);
+    }
+
+    // ────────────────────────────────────────────────────────
+    // RECOMMENDED CAROUSEL
+    // ────────────────────────────────────────────────────────
+    function renderRecommended(){
+      if(!recommendedCarousel) return;
+      const items = menuItems.filter(i => i.badge && (i.badge.includes('Best') || i.badge.includes('Chef') || i.badge.includes('Premium')));
+      if(items.length === 0){
+        recommendedCarousel.innerHTML = '';
+        return;
+      }
+      recommendedCarousel.innerHTML = items.map(item => `
+        <div class="carousel-item" data-id="${item.id}">
+          <div class="emoji">${item.emoji || '🍙'}</div>
+          <div class="name">${item.name}</div>
+          <div class="price">${formatCurrency(item.price)}</div>
+        </div>
+      `).join('');
+      recommendedCarousel.querySelectorAll('.carousel-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const id = parseInt(el.dataset.id);
+          openCustomModal(id);
+        });
+      });
+    }
+
+    // ────────────────────────────────────────────────────────
+    // BACKGROUND
+    // ────────────────────────────────────────────────────────
+    function initOnigirazuBg(){
+      const bg = document.getElementById('oniBg');
+      const emojis = ['🍙','🍘','🍣','🍱','🥢'];
+      let html = '';
+      for(let i=0; i<70; i++){
+        const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+        const size = 30 + Math.floor(Math.random() * 60);
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const delay = Math.random() * 12;
+        const duration = 20 + Math.random() * 20;
+        html += `<span style="position:absolute;top:${top}%;left:${left}%;font-size:${size}px;animation-duration:${duration}s;animation-delay:${delay}s;">${emoji}</span>`;
+      }
+      bg.innerHTML = html;
+    }
+
+    // ────────────────────────────────────────────────────────
+    // TAB TRANSITION
+    // ────────────────────────────────────────────────────────
+    function switchTab(tabId){
+      const tabs = ['tabMenu', 'tabCart', 'tabOrders'];
+      tabs.forEach(id => {
+        const el = document.getElementById(id);
+        if(id === tabId){
+          el.classList.remove('hidden');
+          el.classList.add('visible');
+        } else {
+          el.classList.add('hidden');
+          el.classList.remove('visible');
+        }
+      });
+    }
+
+    // ────────────────────────────────────────────────────────
+    // RENDER MENU
+    // ────────────────────────────────────────────────────────
+    function renderMenu(){
+      const items = getFilteredItems();
+      if(items.length === 0){
+        menuGrid.innerHTML = `<div class="empty-state"><div class="emoji">🍙</div><h3>${t('emptyMenu')}</h3><p>${t('emptyMenuSub')}</p></div>`;
+        return;
+      }
+      const gridClass = currentView === 'grid' ? 'grid' : 'list';
+      menuGrid.className = `menu-grid ${gridClass}`;
+      menuGrid.innerHTML = items.map(item => {
+        const badgeHtml = item.badge ? `<span class="badge-item ${item.badge.includes('Chef')?'chef':item.badge.includes('Premium')?'premium-gold':''}">${item.badge}</span>` : '';
+        return `
+        <div class="menu-card" data-id="${item.id}">
+          <div class="food-icon">${item.emoji || '🍙'}</div>
+          <div class="info">
+            <h4>${item.name} ${badgeHtml}</h4>
+            <p>${item.description}</p>
+            <div class="tags">${item.tags.map(t => `<span>#${t}</span>`).join('')}</div>
+          </div>
+          <div class="actions">
+            <span class="price">${formatCurrency(item.price)}</span>
+            <button class="btn-primary small btn-customize" data-id="${item.id}"><i class="fas fa-pencil-alt"></i> ${t('tabMenu')}</button>
+          </div>
+        </div>
+      `}).join('');
+      menuGrid.querySelectorAll('.btn-customize').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = parseInt(btn.dataset.id);
+          openCustomModal(id);
+        });
+      });
+    }
+
+    // ────────────────────────────────────────────────────────
+    // RENDER CART (with count-up)
+    // ────────────────────────────────────────────────────────
+    function renderCart(){
+      if(!cartContent) return;
+      const validCart = cart.filter(item => getItemById(item.menuItemId));
+      if(validCart.length !== cart.length){
+        cart = validCart;
+        toast(t('toastCartCleaned'), 'info');
+        saveData();
+      }
+      if(cart.length === 0){
+        cartContent.innerHTML = `<div class="empty-state"><div class="emoji">🛒</div><h3>${t('emptyCart')}</h3><p>${t('emptyCartSub')}</p></div>`;
+        cartCount.textContent = '0';
+        return;
+      }
+      let itemsHtml = '';
+      cart.forEach((item) => {
+        const mi = getItemById(item.menuItemId);
+        if(!mi) return;
+        const customStr = [item.customizations.rice, item.customizations.protein, item.customizations.sauce, ...item.customizations.addons].filter(Boolean).join(' · ');
+        itemsHtml += `
+          <div class="cart-item" data-cart-id="${item.cartItemId}">
+            <div class="details">
+              <h4>${mi.name}</h4>
+              <p><i class="fas fa-tag"></i> ${customStr}</p>
+              <p style="font-size:12px;color:#e67e22;font-weight:600;">${formatCurrency(item.basePrice)} each</p>
+            </div>
+            <div class="qty">
+              <button class="qty-minus" data-cart-id="${item.cartItemId}"><i class="fas fa-minus"></i></button>
+              <span>${item.quantity}</span>
+              <button class="qty-plus" data-cart-id="${item.cartItemId}"><i class="fas fa-plus"></i></button>
+              <button class="btn-danger" style="margin-left:4px;" data-cart-id="${item.cartItemId}"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          </div>
+        `;
+      });
+
+      const subtotal = getCartTotal();
+      const discount = subtotal > 1000 ? 100 : 0;
+      const finalTotal = subtotal - discount;
+
+      cartContent.innerHTML = `
+        <div style="padding-bottom:4px;">
+          ${itemsHtml}
+        </div>
+        <div class="cart-footer">
+          <div class="cart-summary">
+            <div class="row"><span><i class="fas fa-receipt"></i> Subtotal</span><span class="amount">${formatCurrency(subtotal)}</span></div>
+            <div class="row"><span><i class="fas fa-concierge-bell"></i> Service fee</span><span class="amount">¥0</span></div>
+            ${discount>0?`<div class="row" style="color:#00b894;"><span><i class="fas fa-gem"></i> Discount</span><span class="amount">-${formatCurrency(discount)}</span></div>`:''}
+            <div class="row total"><span><i class="fas fa-yen-sign"></i> Total</span><span class="amount total-amount" id="cartTotalDisplay">${formatCurrency(finalTotal)}</span></div>
+          </div>
+          <div class="checkout-form">
+            <select id="pickupTime">
+              <option value="12:00">12:00</option><option value="12:15">12:15</option>
+              <option value="12:30" selected>12:30</option><option value="12:45">12:45</option><option value="13:00">13:00</option>
+            </select>
+            <textarea id="orderNote" data-key="orderNotePlaceholder" placeholder=""></textarea>
+            <button class="btn-primary" id="checkoutBtn" style="width:100%;padding:16px;font-size:16px;border-radius:40px;box-shadow:0 4px 16px rgba(230,126,34,0.2);"><i class="fas fa-check-circle"></i> ${t('checkout')}</button>
+          </div>
+        </div>
+      `;
+      cartCount.textContent = getCartCount();
+
+      // Count-up animation for total
+      const totalDisplay = document.getElementById('cartTotalDisplay');
+      if(totalDisplay){
+        const oldVal = parseInt(totalDisplay.textContent.replace(/[¥,]/g,'')) || 0;
+        if(oldVal !== finalTotal){
+          animateNumber(totalDisplay, finalTotal);
+        }
+      }
+
+      // Events
+      cartContent.querySelectorAll('.qty-minus').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cid = parseInt(btn.dataset.cartId);
+          const idx = cart.findIndex(c => c.cartItemId === cid);
+          if(idx === -1) return;
+          if(cart[idx].quantity > 1) cart[idx].quantity--;
+          else cart.splice(idx, 1);
+          saveData(); renderCart();
+        });
+      });
+      cartContent.querySelectorAll('.qty-plus').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cid = parseInt(btn.dataset.cartId);
+          const idx = cart.findIndex(c => c.cartItemId === cid);
+          if(idx === -1) return;
+          cart[idx].quantity++;
+          saveData(); renderCart();
+        });
+      });
+      cartContent.querySelectorAll('.btn-danger').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cid = parseInt(btn.dataset.cartId);
+          const idx = cart.findIndex(c => c.cartItemId === cid);
+          if(idx === -1) return;
+          cart.splice(idx, 1);
+          saveData(); renderCart();
+        });
+      });
+      const checkoutBtn = cartContent.querySelector('#checkoutBtn');
+      if(checkoutBtn){
+        checkoutBtn.addEventListener('click', () => {
+          if(cart.length === 0) return toast(t('toastEmpty'), 'error');
+          const finalTotal = getFinalTotal();
+          const pickupTime = document.getElementById('pickupTime')?.value || '12:30';
+          const note = document.getElementById('orderNote')?.value || '';
+          const orderItems = cart.map(item => {
+            const mi = getItemById(item.menuItemId);
+            return { name: mi.name, quantity: item.quantity, price: item.basePrice, custom: item.customizations };
+          });
+          const order = {
+            id: generateId(),
+            items: orderItems,
+            total: finalTotal,
+            status: 'received',
+            timestamp: new Date().toLocaleString(),
+            pickupTime: pickupTime,
+            note: note,
+            reviewed: false,
+            rating: 0,
+            reviewText: '',
+            customerName: 'Student',
+            createdAt: Date.now(),
+          };
+          orders.push(order);
+          cart = [];
+          saveData();
+          renderCart(); renderOrders(); renderAdminDashboard(); renderReports();
+          toast(t('toastOrderPlaced'), 'success');
+          toast(t('toastNewOrder'), 'info');
+        });
+      }
+    }
+
+    // ────────────────────────────────────────────────────────
+    // RENDER ORDERS
+    // ────────────────────────────────────────────────────────
+    function renderOrders(){
+      if(!ordersList) return;
+      if(orders.length === 0){
+        ordersList.innerHTML = `<div class="empty-state"><div class="emoji">📦</div><h3>${t('emptyOrders')}</h3><p>${t('emptyOrdersSub')}</p></div>`;
+        return;
+      }
+      const statusMap = {
+        received: { label: t('statusReceived'), cls: 'received' },
+        preparing: { label: t('statusPreparing'), cls: 'preparing' },
+        ready: { label: t('statusReady'), cls: 'ready' },
+      };
+      ordersList.innerHTML = orders.slice().reverse().map((order) => {
+        const st = statusMap[order.status] || statusMap.received;
+        const itemsStr = order.items.map(i => `${i.name} ×${i.quantity}`).join(', ');
+        const steps = ['received', 'preparing', 'ready'];
+        const currentIdx = steps.indexOf(order.status);
+        const timelineHtml = `
+          <div class="status-timeline">
+            ${steps.map((s, idx) => `
+              <div class="step ${idx <= currentIdx ? (idx < currentIdx ? 'completed' : 'active') : ''}">
+                <div class="dot">${idx <= currentIdx ? '<i class="fas fa-check"></i>' : (idx+1)}</div>
+                <span class="label">${statusMap[s].label}</span>
+              </div>
+              ${idx < steps.length - 1 ? `<div class="line"><div class="fill ${idx < currentIdx ? 'completed' : ''}" style="width:${idx < currentIdx ? '100%' : (idx === currentIdx ? '50%' : '0%')};"></div></div>` : ''}
+            `).join('')}
+          </div>
+        `;
+
+        const showReview = (order.status === 'ready' && !order.reviewed);
+        const reviewHtml = showReview ? `
+          <div class="review-section" data-order-id="${order.id}">
+            <div class="stars">
+              <span data-star="1">☆</span><span data-star="2">☆</span><span data-star="3">☆</span><span data-star="4">☆</span><span data-star="5">☆</span>
+            </div>
+            <input type="text" data-key="reviewPlaceholderInput" placeholder="" class="review-input" style="width:100%;margin-top:8px;padding:10px 14px;border:1px solid rgba(0,0,0,0.04);border-radius:40px;font-size:13px;font-family:Inter,Noto Sans JP;background:rgba(255,255,255,0.3);outline:none;" />
+            <button class="btn-primary small review-submit" data-order-id="${order.id}" style="margin-top:6px;padding:6px 20px;"><i class="fas fa-star"></i> ${t('submitReview')}</button>
+          </div>
+        ` : (order.reviewed ? `
+          <div style="font-size:13px;color:#f39c12;margin-top:8px;">
+            ⭐ ${'★'.repeat(order.rating)}${'☆'.repeat(5-order.rating)} - ${order.reviewText || 'Thanks!'}
+            <button class="btn-primary small outline btn-edit-review" data-order-id="${order.id}" style="margin-left:8px;padding:2px 12px;font-size:11px;"><i class="fas fa-edit"></i> ${t('editReview')}</button>
+          </div>
+        ` : '');
+
+        return `
+          <div class="order-history-item">
+            <div class="top">
+              <span class="id">#${order.id}</span>
+              <span class="status ${st.cls}"><i class="fas ${order.status==='received'?'fa-clock':order.status==='preparing'?'fa-fire':'fa-check-circle'}"></i> ${st.label}</span>
+            </div>
+            <div class="items">${itemsStr}</div>
+            <div class="time">${order.timestamp} · ${t('readyPickup')}: ${order.pickupTime||'12:30'} · ${t('total')}: ${formatCurrency(order.total)}</div>
+            ${order.note ? `<div style="font-size:12px;color:#8888aa;margin-top:4px;"><i class="fas fa-pencil-alt"></i> ${order.note}</div>` : ''}
+            ${timelineHtml}
+            <div class="actions">
+              <button class="btn-primary small outline btn-reorder" data-id="${order.id}"><i class="fas fa-redo"></i> ${t('orderAgain')}</button>
+            </div>
+            ${reviewHtml}
+          </div>
+        `;
+      }).join('');
+
+      // Re-order
+      ordersList.querySelectorAll('.btn-reorder').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = parseInt(btn.dataset.id);
+          const order = orders.find(o => o.id === id);
+          if(!order) return;
+          order.items.forEach(item => {
+            const mi = menuItems.find(i => i.name === item.name);
+            if(mi){
+              const custom = item.custom || { rice:'White', protein:'Tuna', sauce:'Sriracha', addons:[] };
+              const existing = cart.find(c => c.menuItemId === mi.id && c.customizations.rice === custom.rice && c.customizations.protein === custom.protein && c.customizations.sauce === custom.sauce && JSON.stringify(c.customizations.addons) === JSON.stringify(custom.addons));
+              if(existing) existing.quantity += item.quantity;
+              else {
+                cart.push({ menuItemId: mi.id, customizations: custom, quantity: item.quantity, basePrice: mi.price, cartItemId: ++cartItemIdCounter });
+              }
+            }
+          });
+          saveData(); renderCart(); toast('Items added to cart!','success');
+        });
+      });
+
+      // Review submit
+      ordersList.querySelectorAll('.review-section').forEach(section => {
+        const orderId = parseInt(section.dataset.orderId);
+        let selected = 0;
+        const stars = section.querySelectorAll('.stars span');
+        const input = section.querySelector('.review-input');
+        const submitBtn = section.querySelector('.review-submit');
+
+        stars.forEach(span => {
+          span.addEventListener('click', () => {
+            selected = parseInt(span.dataset.star);
+            stars.forEach(s => {
+              const val = parseInt(s.dataset.star);
+              s.textContent = val <= selected ? '★' : '☆';
+              s.style.color = val <= selected ? '#f39c12' : '#d0d5dd';
+            });
+          });
+          span.addEventListener('mouseenter', () => {
+            const val = parseInt(span.dataset.star);
+            stars.forEach(s => {
+              s.style.color = parseInt(s.dataset.star) <= val ? '#f39c12' : '#d0d5dd';
+            });
+          });
+          span.addEventListener('mouseleave', () => {
+            stars.forEach(s => {
+              s.style.color = parseInt(s.dataset.star) <= selected ? '#f39c12' : '#d0d5dd';
+              s.textContent = parseInt(s.dataset.star) <= selected ? '★' : '☆';
+            });
+          });
+        });
+
+        submitBtn.addEventListener('click', () => {
+          const order = orders.find(o => o.id === orderId);
+          if(!order) return;
+          if(selected === 0){ toast(t('toastSelectRating'),'error'); return; }
+          order.rating = selected;
+          order.reviewText = input.value.trim() || 'No comment';
+          order.reviewed = true;
+          order.reviewTimestamp = Date.now();
+          saveData();
+          renderOrders(); renderAdminDashboard();
+          toast(t('toastReviewSubmitted'),'success');
+        });
+      });
+
+      // Edit review
+      ordersList.querySelectorAll('.btn-edit-review').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const orderId = parseInt(btn.dataset.orderId);
+          const order = orders.find(o => o.id === orderId);
+          if(!order) return;
+          if(Date.now() - order.reviewTimestamp > 300000){
+            toast('Edit window expired (5 min).','error');
+            return;
+          }
+          order.reviewed = false;
+          order.rating = 0;
+          order.reviewText = '';
+          saveData();
+          renderOrders();
+          toast(t('toastReviewUpdated'),'info');
+        });
+      });
+    }
+
+    // ────────────────────────────────────────────────────────
+    // ADMIN DASHBOARD
+    // ────────────────────────────────────────────────────────
+    function renderAdminDashboard(){
+      if(!adminStats) return;
+      const totalRevenue = orders.reduce((s,o) => s + o.total, 0);
+      const pending = orders.filter(o => o.status === 'received' || o.status === 'preparing').length;
+      const ready = orders.filter(o => o.status === 'ready').length;
+      const sparkData = [10, 35, 20, 50, 30, 40, 25];
+      const maxSpark = Math.max(...sparkData);
+      adminStats.innerHTML = `
+        <div class="stat-box"><div class="number">${orders.length}</div><div class="label"><i class="fas fa-shopping-bag"></i> ${t('aDash')}</div>
+          <div class="sparkline">${sparkData.map(v => `<div class="bar" style="height:${(v/maxSpark)*16}px;"></div>`).join('')}</div>
+        </div>
+        <div class="stat-box"><div class="number orange">${formatCurrency(totalRevenue)}</div><div class="label"><i class="fas fa-yen-sign"></i> ${t('aRevenue')}</div>
+          <div class="sparkline">${sparkData.map(v => `<div class="bar" style="height:${(v/maxSpark)*16}px;"></div>`).join('')}</div>
+        </div>
+        <div class="stat-box"><div class="number">${pending}</div><div class="label"><i class="fas fa-hourglass-half"></i> Pending</div>
+          <div class="sparkline">${sparkData.map(v => `<div class="bar" style="height:${(v/maxSpark)*16}px;"></div>`).join('')}</div>
+        </div>
+        <div class="stat-box"><div class="number">${ready}</div><div class="label"><i class="fas fa-check-circle"></i> ${t('readyPickup')}</div>
+          <div class="sparkline">${sparkData.map(v => `<div class="bar" style="height:${(v/maxSpark)*16}px;"></div>`).join('')}</div>
+        </div>
+      `;
+      renderAdminOrders();
+    }
+
+    function renderAdminOrders() {
+      if (!adminOrderList) return;
+      let filtered = orders;
+      if (adminFilter !== 'all') filtered = orders.filter(o => o.status === adminFilter);
+      if (filtered.length === 0) {
+        adminOrderList.innerHTML =
+          `<div style="color:#b2bec3;text-align:center;padding:20px;">${t('emptyAdminOrders')}</div>`;
+        return;
+      }
+      const statusMap = { received: t('statusReceived'), preparing: t('statusPreparing'), ready: t('statusReady') };
+      const iconMap = { received: 'fa-clock', preparing: 'fa-fire', ready: 'fa-check-circle' };
+      const colorMap = { received: '#f39c12', preparing: '#3498db', ready: '#00b894' };
+      let tableHtml = `
+        <table class="admin-order-table">
+          <thead>
+            <tr>
+              <th>#ID</th>
+              <th>${t('customer')}</th>
+              <th>${t('items')}</th>
+              <th>${t('qty')}</th>
+              <th>${t('total')}</th>
+              <th>${t('status')}</th>
+              <th>${t('time')}</th>
+              <th>⭐ Review</th>
+              <th>${t('action')}</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      filtered.slice().reverse().forEach((o) => {
+        const name = o.customerName || 'Student';
+        const itemsStr = o.items.map(i => i.name).join(', ');
+        const totalQty = o.items.reduce((s, i) => s + i.quantity, 0);
+        const statusLabel = statusMap[o.status] || o.status;
+        const icon = iconMap[o.status] || 'fa-clock';
+        const color = colorMap[o.status] || '#636e72';
+        const waitTime = Math.floor((Date.now() - o.createdAt) / 60000);
+        const waitDisplay = waitTime < 1 ? t('newOrder') : `${waitTime}m ${t('pending')}`;
+        const isReady = o.status === 'ready';
+
+        let reviewHtml = '';
+        if (o.reviewed && o.rating > 0) {
+          const stars = '★'.repeat(o.rating) + '☆'.repeat(5 - o.rating);
+          reviewHtml = `<span style="color:#f39c12;font-size:14px;display:block;">${stars}</span>
+                        <span style="font-size:11px;color:#636e72;display:block;max-width:140px;word-break:break-word;">${o.reviewText || ''}</span>`;
+        } else if (o.status === 'ready' && !o.reviewed) {
+          reviewHtml = `<span style="color:#b2bec3;font-size:12px;">${t('noReview')}</span>`;
+        } else {
+          reviewHtml = `<span style="color:#b2bec3;font-size:12px;">—</span>`;
+        }
+
+        tableHtml += `
+          <tr>
+            <td><strong>#${o.id}</strong></td>
+            <td><span class="customer-name"><i class="fas fa-user"></i> ${name}</span></td>
+            <td>${itemsStr}</td>
+            <td>${totalQty}</td>
+            <td>${formatCurrency(o.total)}</td>
+            <td><span class="status-badge ${o.status}" style="background:${color}15;color:${color};"><i class="fas ${icon}"></i> ${statusLabel}</span></td>
+            <td><span class="order-time"><i class="far fa-clock"></i> ${o.timestamp}</span><br><span style="font-size:10px;color:#b2bec3;">⏳ ${waitDisplay}</span></td>
+            <td style="vertical-align:middle;">${reviewHtml}</td>
+            <td>
+              <button class="btn-action btn-update-status" data-id="${o.id}" ${isReady ? 'disabled' : ''}>
+                <i class="fas fa-chevron-circle-right"></i> ${isReady ? '✔ Completed' : t('acceptPrint')}
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+      tableHtml += `</tbody></table>`;
+      adminOrderList.innerHTML = tableHtml;
+
+      adminOrderList.querySelectorAll('.btn-update-status:not([disabled])').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = parseInt(btn.dataset.id);
+          const order = orders.find(o => o.id === id);
+          if (!order) return;
+          const statuses = ['received', 'preparing', 'ready'];
+          let idx = statuses.indexOf(order.status);
+          if (idx >= statuses.length - 1) return;
+          idx = (idx + 1) % statuses.length;
+          order.status = statuses[idx];
+          saveData();
+          renderAdminDashboard();
+          renderOrders();
+          toast(t('toastStatusUpdated', id, statusMap[order.status]), 'info');
+          if (order.status === 'ready') {
+            fireConfetti();
+            toast(t('toastReadyCelebration'), 'success');
+          }
+        });
+      });
+    }
+
+    // ────────────────────────────────────────────────────────
+    // MENU MANAGEMENT
+    // ────────────────────────────────────────────────────────
+    function renderMenuManagement(){
+      if(!menuMgmtList) return;
+      if(menuItems.length === 0){
+        menuMgmtList.innerHTML = `<div style="color:#b2bec3;text-align:center;padding:16px;">${t('emptyMenu')}</div>`;
+        return;
+      }
+      menuMgmtList.innerHTML = menuItems.map(item => `
+        <div class="menu-mgmt-item">
+          <div class="info"><h4><i class="fas fa-utensil-spoon"></i> ${item.name}</h4><p>${item.description} · ${formatCurrency(item.price)} · ${item.tags.join(', ')}</p></div>
+          <div class="actions"><button class="btn-danger btn-delete-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i> Delete</button></div>
+        </div>
+      `).join('');
+      menuMgmtList.querySelectorAll('.btn-delete-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = parseInt(btn.dataset.id);
+          menuItems = menuItems.filter(i => i.id !== id);
+          cart = cart.filter(c => c.menuItemId !== id);
+          saveData();
+          renderMenuManagement(); renderMenu(); renderCart();
+          renderRecommended();
+          toast(t('toastItemDeleted'), 'info');
+        });
+      });
+    }
+
+    // ────────────────────────────────────────────────────────
+    // REPORTS
+    // ────────────────────────────────────────────────────────
+    function renderReports(){
+      const days = ['Mon','Tue','Wed','Thu','Fri'];
+      const revenueMap = {};
+      orders.forEach(o => {
+        const dayIdx = Math.floor(Math.random() * 5);
+        const day = days[dayIdx];
+        revenueMap[day] = (revenueMap[day] || 0) + o.total;
+      });
+      const maxRevenue = Math.max(...Object.values(revenueMap), 1);
+      if(chartBars){
+        chartBars.innerHTML = days.map(day => {
+          const val = revenueMap[day] || 0;
+          const height = Math.max((val / maxRevenue) * 100, 10);
+          return `<div class="chart-bar" style="height:${height}px;">${val>0?formatCurrency(val):''}<span class="day">${day}</span></div>`;
+        }).join('');
+      }
+      const total = orders.reduce((s,o) => s + o.total, 0);
+      if(reportTotal) reportTotal.textContent = total;
+      const itemCount = {};
+      orders.forEach(o => { o.items.forEach(i => { itemCount[i.name] = (itemCount[i.name] || 0) + i.quantity; }); });
+      const sorted = Object.entries(itemCount).sort((a,b) => b[1] - a[1]).slice(0, 3);
+      if(topItemsList){
+        if(sorted.length === 0) topItemsList.innerHTML = '<div style="color:#b2bec3;font-size:13px;">No data yet.</div>';
+        else topItemsList.innerHTML = sorted.map(([name,qty]) => `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(0,0,0,0.04);"><span><i class="fas fa-crown" style="color:#f39c12;"></i> ${name}</span><span>${qty} sold</span></div>`).join('');
+      }
+    }
+
+    // ────────────────────────────────────────────────────────
+    // MODAL
+    // ────────────────────────────────────────────────────────
+    function openCustomModal(itemId){
+      const item = getItemById(itemId);
+      if(!item) return;
+      modalTargetItemId = itemId;
+      modalItemName.textContent = item.name;
+      modalSelected = { rice:'White', protein:'Tuna', sauce:'Sriracha', addons:[] };
+      optRice.querySelectorAll('.opt').forEach(el => el.classList.toggle('active', el.dataset.value === 'White'));
+      optProtein.querySelectorAll('.opt').forEach(el => el.classList.toggle('active', el.dataset.value === 'Tuna'));
+      optSauce.querySelectorAll('.opt').forEach(el => el.classList.toggle('active', el.dataset.value === 'Sriracha'));
+      optAddons.querySelectorAll('.opt').forEach(el => el.classList.remove('active'));
+      modalOverlay.classList.add('active');
+      setTimeout(() => modalConfirm.focus(), 100);
+    }
+
+    function closeModal(){
+      modalOverlay.classList.remove('active');
+      document.activeElement?.blur();
+    }
+
+    function setupModalOptions(){
+      const groups = [optRice, optProtein, optSauce];
+      groups.forEach(group => {
+        group.querySelectorAll('.opt').forEach(el => {
+          el.addEventListener('click', () => {
+            group.querySelectorAll('.opt').forEach(o => o.classList.remove('active'));
+            el.classList.add('active');
+            const key = group.id.replace('opt','').toLowerCase();
+            modalSelected[key] = el.dataset.value;
+          });
+          el.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+          });
+        });
+      });
+      optAddons.querySelectorAll('.opt').forEach(el => {
+        el.addEventListener('click', () => {
+          el.classList.toggle('active');
+          const val = el.dataset.value;
+          const idx = modalSelected.addons.indexOf(val);
+          if(idx > -1) modalSelected.addons.splice(idx, 1);
+          else modalSelected.addons.push(val);
+        });
+        el.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+        });
+      });
+    }
+
+    modalCancel.addEventListener('click', closeModal);
+    modalConfirm.addEventListener('click', () => {
+      if(modalTargetItemId === null) return;
+      const item = getItemById(modalTargetItemId);
+      if(!item) return;
+      const custom = {
+        rice: modalSelected.rice || 'White',
+        protein: modalSelected.protein || 'Tuna',
+        sauce: modalSelected.sauce || 'Sriracha',
+        addons: [...modalSelected.addons]
+      };
+      const existing = cart.find(c => c.menuItemId === modalTargetItemId && c.customizations.rice === custom.rice && c.customizations.protein === custom.protein && c.customizations.sauce === custom.sauce && JSON.stringify(c.customizations.addons) === JSON.stringify(custom.addons));
+      if(existing) existing.quantity++;
+      else {
+        cart.push({ menuItemId: modalTargetItemId, customizations: custom, quantity: 1, basePrice: item.price, cartItemId: ++cartItemIdCounter });
+      }
+      saveData();
+      renderCart(); renderMenu(); closeModal();
+      toast(t('toastAdded'), 'success');
+    });
+
+    modalOverlay.addEventListener('click', (e) => {
+      if(e.target === modalOverlay) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && modalOverlay.classList.contains('active')) closeModal();
+    });
+
+    // ────────────────────────────────────────────────────────
+    // TABS, ROLE, SEARCH, FILTER, THEME, LANG
+    // ────────────────────────────────────────────────────────
+    userTabs.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if(!btn || !btn.dataset.tab) return;
+      const tab = btn.dataset.tab;
+      userTabs.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if(tab === 'menu') switchTab('tabMenu');
+      else if(tab === 'cart'){ switchTab('tabCart'); renderCart(); }
+      else if(tab === 'orders'){ switchTab('tabOrders'); renderOrders(); }
+    });
+
+    adminTabs.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if(!btn || !btn.dataset.atab) return;
+      const tab = btn.dataset.atab;
+      adminTabs.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      [aTabDashboard, aTabMenuMgmt, aTabReports].forEach(el => el.classList.add('hidden'));
+      if(tab === 'dashboard'){ aTabDashboard.classList.remove('hidden'); renderAdminDashboard(); }
+      else if(tab === 'menu-mgmt'){ aTabMenuMgmt.classList.remove('hidden'); renderMenuManagement(); }
+      else if(tab === 'reports'){ aTabReports.classList.remove('hidden'); renderReports(); }
+    });
+
+    roleToggle.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if(!btn || !btn.dataset.role) return;
+      const role = btn.dataset.role;
+      roleToggle.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if(role === 'user'){
+        userView.classList.remove('hidden');
+        adminView.classList.add('hidden');
+        renderMenu(); renderCart(); renderOrders(); renderRecommended();
+      }else{
+        userView.classList.add('hidden');
+        adminView.classList.remove('hidden');
+        renderAdminDashboard(); renderMenuManagement(); renderReports();
+      }
+    });
+
+    addMenuBtn.addEventListener('click', () => {
+      const name = newName.value.trim();
+      const price = parseInt(newPrice.value.trim());
+      const desc = newDesc.value.trim();
+      const tags = newTags.value.split(',').map(s => s.trim()).filter(Boolean);
+      if(!name || isNaN(price) || price <= 0){ toast(t('toastFillFields'),'error'); return; }
+      const newItem = { id: nextItemId++, name, price, description: desc || 'Delicious onigirazu', tags: tags.length ? tags : ['custom'], emoji: '🍙', badge: '' };
+      menuItems.push(newItem);
+      saveData();
+      renderMenuManagement(); renderMenu(); renderRecommended();
+      newName.value = ''; newPrice.value = ''; newDesc.value = ''; newTags.value = '';
+      toast(t('toastAddedMenu', name), 'success');
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim();
+      renderMenu();
+    });
+
+    filterGroup.addEventListener('click', (e) => {
+      const tag = e.target.closest('.filter-tag');
+      if(!tag) return;
+      filterGroup.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+      tag.classList.add('active');
+      currentFilter = tag.dataset.tag;
+      renderMenu();
+    });
+
+    viewList.addEventListener('click', () => {
+      currentView = 'list';
+      viewList.classList.add('active');
+      viewGrid.classList.remove('active');
+      renderMenu();
+    });
+    viewGrid.addEventListener('click', () => {
+      currentView = 'grid';
+      viewGrid.classList.add('active');
+      viewList.classList.remove('active');
+      renderMenu();
+    });
+
+    bannerBtn.addEventListener('click', () => {
+      userTabs.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      const menuTab = userTabs.querySelector('[data-tab="menu"]');
+      if(menuTab) menuTab.classList.add('active');
+      switchTab('tabMenu');
+      document.getElementById('tabMenu').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    adminFilterEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if(!btn || !btn.dataset.afilter) return;
+      adminFilterEl.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      adminFilter = btn.dataset.afilter;
+      renderAdminOrders();
+    });
+
+    const clearOrdersBtn = document.getElementById('clearOrdersBtn');
+    if (clearOrdersBtn) {
+      clearOrdersBtn.addEventListener('click', function() {
+        if (orders.length === 0) {
+          toast('No orders to clear.', 'info');
+          return;
+        }
+        if (confirm('Are you sure you want to delete ALL orders? This action cannot be undone!')) {
+          orders = [];
+          saveData();
+          renderAdminDashboard();
+          renderOrders();
+          renderReports();
+          toast('All orders have been cleared.', 'success');
+        }
+      });
+    }
+
+    // ─── NÚT RESET MENU ───
+    if (resetMenuBtn) {
+      resetMenuBtn.addEventListener('click', function() {
+        if (confirm('Are you sure you want to reset the menu to default? This will remove any custom items.')) {
+          resetMenuToDefault();
+        }
+      });
+    }
+
+    let darkMode = false;
+    themeToggle.addEventListener('click', () => {
+      darkMode = !darkMode;
+      document.body.classList.toggle('dark', darkMode);
+      const icon = themeToggle.querySelector('i');
+      if(icon){
+        icon.className = darkMode ? 'fas fa-sun' : 'fas fa-moon';
+      }
+      themeToggle.classList.toggle('rotated');
+    });
+
+    langEn.addEventListener('click', () => {
+      currentLang = 'en';
+      langEn.classList.add('active');
+      langJa.classList.remove('active');
+      updateLangUI();
+    });
+    langJa.addEventListener('click', () => {
+      currentLang = 'ja';
+      langJa.classList.add('active');
+      langEn.classList.remove('active');
+      updateLangUI();
+    });
+
+    // ────────────────────────────────────────────────────────
+    // INIT
+    // ────────────────────────────────────────────────────────
+    function init(){
+      loadData();
+      initOnigirazuBg();
+      setupModalOptions();
+      if(orders.length === 0){
+        const s1 = {
+          id: generateId(),
+          items: [
+            { name:'Spicy Tuna', quantity:2, price:350, custom:{ rice:'White', protein:'Tuna', sauce:'Sriracha', addons:['Avocado'] } },
+            { name:'Teriyaki Chicken', quantity:1, price:400, custom:{ rice:'Brown', protein:'Chicken', sauce:'Teriyaki', addons:['Sesame'] } }
+          ],
+          total: 1100 - 100,
+          status: 'ready',
+          timestamp: new Date(Date.now() - 3600000).toLocaleString(),
+          pickupTime: '12:15',
+          reviewed: true,
+          rating: 5,
+          reviewText: 'Amazing! So tasty!',
+          note: 'Extra spicy please',
+          createdAt: Date.now() - 3600000,
+          customerName: 'Sara Young',
+        };
+        orders.push(s1);
+        const s2 = {
+          id: generateId(),
+          items: [
+            { name:'Veggie Rainbow', quantity:1, price:300, custom:{ rice:'Mixed', protein:'Tofu', sauce:'None', addons:['Kimchi'] } }
+          ],
+          total: 300,
+          status: 'preparing',
+          timestamp: new Date(Date.now() - 1800000).toLocaleString(),
+          pickupTime: '12:45',
+          reviewed: false,
+          rating: 0,
+          reviewText: '',
+          note: 'No onions please',
+          createdAt: Date.now() - 1800000,
+          customerName: 'John Doe',
+        };
+        orders.push(s2);
+        const s3 = {
+          id: generateId(),
+          items: [
+            { name:'Katsu Curry', quantity:1, price:450, custom:{ rice:'White', protein:'Chicken', sauce:'Teriyaki', addons:['Cheese'] } }
+          ],
+          total: 450,
+          status: 'received',
+          timestamp: new Date(Date.now() - 600000).toLocaleString(),
+          pickupTime: '13:00',
+          reviewed: false,
+          rating: 0,
+          reviewText: '',
+          note: '',
+          createdAt: Date.now() - 600000,
+          customerName: 'Alice Doe',
+        };
+        orders.push(s3);
+        saveData();
+      }
+      renderMenu(); renderCart(); renderOrders(); renderAdminDashboard(); renderMenuManagement(); renderReports(); renderRecommended();
+      userView.classList.remove('hidden'); adminView.classList.add('hidden');
+      roleToggle.querySelector('[data-role="user"]').classList.add('active');
+      roleToggle.querySelector('[data-role="admin"]').classList.remove('active');
+      updateLangUI();
+    }
+
+    init();
+  </script>
+</body>
+</html>
