@@ -214,7 +214,7 @@
       background: #3d3d5c;
     }
 
-    /* ─── HERO BANNER (REDESIGNED) ─── */
+    /* ─── HERO BANNER ─── */
     .banner {
       border-radius: var(--radius-lg);
       padding: 32px 28px;
@@ -279,11 +279,10 @@
     .banner .btn-order-now:active {
       transform: scale(0.97);
     }
-    /* Remove flash badge — it's clutter */
 
     /* ─── RECOMMENDED ─── */
     .recommended-section {
-      margin-bottom: var(--space-lg);
+      margin-bottom: var(--space-md);
     }
     .recommended-section .section-label {
       font-size: 12px;
@@ -356,6 +355,45 @@
       font-size: 11px;
       color: #e67e22;
       font-weight: 600;
+    }
+
+    /* ─── COMBO PROMO ─── */
+    .combo-promo {
+      background: rgba(230, 126, 34, 0.06);
+      border: 1px solid rgba(230, 126, 34, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: var(--space-md);
+      font-size: 14px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    body.dark .combo-promo {
+      background: rgba(230, 126, 34, 0.08);
+      border-color: rgba(230, 126, 34, 0.15);
+    }
+    .combo-promo strong {
+      color: #e67e22;
+    }
+    .combo-promo .divider {
+      width: 1px;
+      height: 20px;
+      background: rgba(0, 0, 0, 0.06);
+    }
+    body.dark .combo-promo .divider {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .combo-promo .promo-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .combo-promo .promo-item .icon {
+      font-size: 18px;
     }
 
     /* ─── SEARCH & FILTER ─── */
@@ -527,7 +565,7 @@
       margin: inherit;
     }
 
-    /* ─── MENU CARDS (REDESIGNED) ─── */
+    /* ─── MENU CARDS (ENHANCED) ─── */
     .menu-grid {
       display: flex;
       flex-direction: column;
@@ -567,11 +605,24 @@
       gap: 12px;
       position: relative;
       cursor: default;
+      border-left-width: 4px;
     }
     body.dark .menu-card {
       background: rgba(255,255,255,0.03);
       border-color: rgba(255,255,255,0.04);
     }
+    /* Category-specific styles */
+    .menu-card[data-category="budget"] { border-left-color: #10b981; }
+    .menu-card[data-category="standard"] { border-left-color: #6b7280; }
+    .menu-card[data-category="bestseller"] { border-left-color: #f59e0b; }
+    .menu-card[data-category="premium"] {
+      border-left-color: #f4d58d;
+      background: rgba(244, 213, 141, 0.04);
+    }
+    body.dark .menu-card[data-category="premium"] {
+      background: rgba(244, 213, 141, 0.06);
+    }
+
     .menu-card:hover {
       border-color: rgba(230,126,34,0.25);
       transform: translateY(-2px);
@@ -615,19 +666,25 @@
       font-weight: 700;
       padding: 2px 10px;
       border-radius: var(--radius-full);
-      background: #e67e22;
-      color: #ffffff;
       letter-spacing: 0.3px;
       font-family: 'Inter', 'Noto Sans JP', sans-serif;
       flex-shrink: 0;
+      text-transform: uppercase;
     }
-    .menu-card .info .badge-item.chef {
+    .menu-card .info .badge-item.bestseller {
       background: #f59e0b;
       color: #ffffff;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
     }
     .menu-card .info .badge-item.premium {
       background: linear-gradient(135deg, #f4d58d, #e6c07a);
       color: #1a1a2e;
+      border: 1px solid rgba(244, 213, 141, 0.3);
+      box-shadow: 0 2px 8px rgba(244, 213, 141, 0.1);
+    }
+    .menu-card .info .badge-item.chef {
+      background: #10b981;
+      color: #ffffff;
     }
     .menu-card .info p {
       font-size: 13px;
@@ -667,6 +724,14 @@
       color: #e67e22;
       font-size: 17px;
       font-variant-numeric: tabular-nums;
+    }
+    /* Premium price styling */
+    .menu-card[data-category="premium"] .price {
+      color: #f4d58d;
+      text-shadow: 0 0 20px rgba(244, 213, 141, 0.1);
+    }
+    body.dark .menu-card[data-category="premium"] .price {
+      text-shadow: 0 0 30px rgba(244, 213, 141, 0.2);
     }
 
     /* ─── BUTTONS ─── */
@@ -1853,6 +1918,14 @@
       .carousel-item .emoji {
         font-size: 22px;
       }
+      .combo-promo {
+        font-size: 12px;
+        padding: 10px 16px;
+        gap: 12px;
+      }
+      .combo-promo .divider {
+        height: 16px;
+      }
     }
   </style>
 </head>
@@ -1882,7 +1955,7 @@
       <div id="userView">
         <div class="banner" id="banner">
           <h2 id="bannerTitle">Lunch, your way.</h2>
-          <p id="bannerSub">Custom onigirazu from ¥300 · ready in 5 min</p>
+          <p id="bannerSub">Custom onigirazu from ¥220 · ready in 5 min</p>
           <button class="btn-order-now" id="bannerBtn"><i class="fas fa-shopping-bag"></i> Order Now</button>
         </div>
 
@@ -1890,6 +1963,13 @@
         <div class="recommended-section">
           <div class="section-label"><span class="gold">✦</span> <span data-key="recommended">Recommended for you</span></div>
           <div class="carousel" id="recommendedCarousel"></div>
+        </div>
+
+        <!-- COMBO PROMOTION -->
+        <div class="combo-promo" id="comboPromo">
+          <span class="promo-item"><span class="icon">🍱</span> <span data-key="combo2">Any 2 Items</span>: <strong data-key="save20">Save ¥20</strong></span>
+          <span class="divider"></span>
+          <span class="promo-item"><span class="icon">🥢</span> <span data-key="combo3">Any 3 Items</span>: <strong data-key="save50">Save ¥50</strong></span>
         </div>
 
         <div class="search-row">
@@ -2025,6 +2105,15 @@
         </div>
       </div>
 
+      <!-- SIDES (ADD-ONS) -->
+      <div class="option-group">
+        <label data-key="optSides"><i class="fas fa-utensil-spoon"></i> Sides (optional)</label>
+        <div class="options" id="optSides" role="group" aria-label="Sides options">
+          <span class="opt" data-value="Miso Soup" data-price="100" role="button" tabindex="0">🍜 <span data-key="misoSoup">Miso Soup</span> (+¥100)</span>
+          <span class="opt" data-value="Tea" data-price="80" role="button" tabindex="0">🍵 <span data-key="tea">Tea</span> (+¥80)</span>
+        </div>
+      </div>
+
       <div class="modal-actions">
         <button class="cancel" id="modalCancel" data-key="modalCancel"><i class="fas fa-times"></i> Cancel</button>
         <button class="confirm" id="modalConfirm" data-key="modalConfirm"><i class="fas fa-cart-plus"></i> Add to cart</button>
@@ -2039,10 +2128,14 @@
     // DATA
     // ────────────────────────────────────────────────────────
     const MENU_DEFAULT = [
-      { id: 1, name: 'Spicy Tuna', price: 350, description: 'with avocado & sriracha', tags: ['spicy', 'seafood'], emoji: '🍣', badge: 'Best Seller' },
-      { id: 2, name: 'Teriyaki Chicken', price: 400, description: 'grilled with sesame', tags: ['chicken', 'teriyaki'], emoji: '🍗', badge: '' },
-      { id: 3, name: 'Veggie Rainbow', price: 300, description: 'fresh & healthy', tags: ['vegan', 'healthy'], emoji: '🥗', badge: 'Chef\'s Pick' },
-      { id: 4, name: 'Salmon Miso', price: 420, description: 'miso-glazed salmon', tags: ['seafood', 'premium'], emoji: '🐟', badge: 'Premium' },
+      { id: 1, name: 'Spicy Tuna', price: 290, description: 'with avocado & sriracha', tags: ['spicy', 'seafood'],
+      emoji: '🍣', badge: 'Best Seller', category: 'bestseller' },
+      { id: 2, name: 'Teriyaki Chicken', price: 250, description: 'grilled with sesame', tags: ['chicken', 'teriyaki'],
+        emoji: '🍗', badge: '', category: 'standard' },
+      { id: 3, name: 'Veggie Rainbow', price: 220, description: 'fresh & healthy', tags: ['vegan', 'healthy'],
+        emoji: '🥗', badge: '', category: 'budget' },
+      { id: 4, name: 'Salmon Miso', price: 390, description: 'miso-glazed salmon', tags: ['seafood', 'premium'],
+        emoji: '🐟', badge: 'Premium', category: 'premium' },
     ];
 
     let menuItems = [];
@@ -2052,7 +2145,7 @@
     let orders = [];
     let nextOrderId = 100;
     let modalTargetItemId = null;
-    let modalSelected = { rice: 'White', protein: 'Tuna', sauce: 'Sriracha', addons: [] };
+    let modalSelected = { rice: 'White', protein: 'Tuna', sauce: 'Sriracha', addons: [], sides: [] };
     let currentLang = 'en';
     let currentView = 'list';
     let currentFilter = 'all';
@@ -2141,6 +2234,9 @@
         optProtein: 'Protein',
         optSauce: 'Sauce',
         optAddons: 'Add-ons (click to toggle)',
+        optSides: 'Sides (optional)',
+        misoSoup: 'Miso Soup',
+        tea: 'Tea',
         modalCancel: 'Cancel',
         modalConfirm: 'Add to cart',
         toastAdded: 'Added to cart!',
@@ -2201,6 +2297,11 @@
         reviewPlaceholderInput: 'How was it? (optional)',
         resetMenu: 'Reset to Default',
         menuResetSuccess: 'Menu has been reset to default.',
+        combo2: 'Any 2 Items',
+        save20: 'Save ¥20',
+        combo3: 'Any 3 Items',
+        save50: 'Save ¥50',
+        comboDiscount: 'Combo Discount',
       },
       ja: {
         flash: 'フラッシュセール',
@@ -2223,6 +2324,9 @@
         optProtein: 'タンパク質',
         optSauce: 'ソース',
         optAddons: 'トッピング (クリックで選択)',
+        optSides: 'サイド (オプション)',
+        misoSoup: '味噌汁',
+        tea: 'お茶',
         modalCancel: 'キャンセル',
         modalConfirm: 'カートに追加',
         toastAdded: 'カートに追加しました！',
@@ -2283,6 +2387,11 @@
         reviewPlaceholderInput: 'いかがでしたか？ (任意)',
         resetMenu: 'デフォルトに戻す',
         menuResetSuccess: 'メニューがデフォルトにリセットされました。',
+        combo2: '2品以上',
+        save20: '¥20割引',
+        combo3: '3品以上',
+        save50: '¥50割引',
+        comboDiscount: 'コンボ割引',
       }
     };
 
@@ -2302,8 +2411,10 @@
         if (key) el.placeholder = t(key);
       });
       document.getElementById('bannerTitle').textContent = currentLang === 'ja' ? 'ランチ、あなたのスタイルで。' : 'Lunch, your way.';
-      document.getElementById('bannerSub').textContent = currentLang === 'ja' ? 'カスタムおにぎらず ¥300～・5分で準備' : 'Custom onigirazu from ¥300 · ready in 5 min';
-      document.getElementById('bannerBtn').innerHTML = currentLang === 'ja' ? '<i class="fas fa-shopping-bag"></i> 今すぐ注文' : '<i class="fas fa-shopping-bag"></i> Order Now';
+      document.getElementById('bannerSub').textContent = currentLang === 'ja' ? 'カスタムおにぎらず ¥220～・5分で準備' :
+        'Custom onigirazu from ¥220 · ready in 5 min';
+      document.getElementById('bannerBtn').innerHTML = currentLang === 'ja' ? '<i class="fas fa-shopping-bag"></i> 今すぐ注文' :
+        '<i class="fas fa-shopping-bag"></i> Order Now';
       renderMenu();
       renderCart();
       renderOrders();
@@ -2337,7 +2448,8 @@
     const optRice = $('#optRice'),
       optProtein = $('#optProtein'),
       optSauce = $('#optSauce'),
-      optAddons = $('#optAddons');
+      optAddons = $('#optAddons'),
+      optSides = $('#optSides');
     const modalCancel = $('#modalCancel'),
       modalConfirm = $('#modalConfirm');
     const roleToggle = $('#roleToggle'),
@@ -2384,7 +2496,8 @@
 
     function getItemById(id) { return menuItems.find(i => i.id === id); }
 
-    function getCartTotal() { return cart.reduce((sum, item) => sum + item.basePrice * item.quantity, 0); }
+    function getCartTotal() { return cart.reduce((sum, item) => sum + (item.effectivePrice || item.basePrice) * item.quantity,
+        0); }
 
     function getCartCount() { return cart.reduce((sum, item) => sum + item.quantity, 0); }
 
@@ -2404,8 +2517,18 @@
 
     function getFinalTotal() {
       const subtotal = getCartTotal();
-      const discount = subtotal > 1000 ? 100 : 0;
-      return subtotal - discount;
+      const totalQty = getCartCount();
+      let comboDiscount = 0;
+      if (totalQty >= 3) comboDiscount = 50;
+      else if (totalQty >= 2) comboDiscount = 20;
+      return subtotal - comboDiscount;
+    }
+
+    function getComboDiscount() {
+      const totalQty = getCartCount();
+      if (totalQty >= 3) return 50;
+      if (totalQty >= 2) return 20;
+      return 0;
     }
 
     function animateNumber(el, target, duration = 500) {
@@ -2451,7 +2574,7 @@
     function renderRecommended() {
       if (!recommendedCarousel) return;
       const items = menuItems.filter(i => i.badge && (i.badge.includes('Best') || i.badge.includes('Chef') || i.badge.includes(
-      'Premium')));
+        'Premium')));
       if (items.length === 0) {
         recommendedCarousel.innerHTML = '';
         return;
@@ -2501,11 +2624,16 @@
       const gridClass = currentView === 'grid' ? 'grid' : 'list';
       menuGrid.className = `menu-grid ${gridClass}`;
       menuGrid.innerHTML = items.map(item => {
-        const badgeHtml = item.badge ?
-          `<span class="badge-item ${item.badge.includes('Chef')?'chef':item.badge.includes('Premium')?'premium':''}">${item.badge}</span>` :
-          '';
+        let badgeHtml = '';
+        if (item.badge) {
+          let cls = '';
+          if (item.badge.includes('Best')) cls = 'bestseller';
+          else if (item.badge.includes('Premium')) cls = 'premium';
+          else if (item.badge.includes('Chef')) cls = 'chef';
+          badgeHtml = `<span class="badge-item ${cls}">${item.badge}</span>`;
+        }
         return `
-        <div class="menu-card" data-id="${item.id}">
+        <div class="menu-card" data-id="${item.id}" data-category="${item.category || 'standard'}">
           <div class="food-icon">${item.emoji || '🍙'}</div>
           <div class="info">
             <div class="name-row">
@@ -2553,12 +2681,14 @@
         const customStr = [item.customizations.rice, item.customizations.protein, item.customizations.sauce, ...item
           .customizations.addons
         ].filter(Boolean).join(' · ');
+        const sidesStr = item.sides && item.sides.length > 0 ? ` · +${item.sides.join(', ')}` : '';
+        const displayPrice = item.effectivePrice || item.basePrice;
         itemsHtml += `
           <div class="cart-item" data-cart-id="${item.cartItemId}">
             <div class="details">
               <h4>${mi.name}</h4>
-              <p><i class="fas fa-tag"></i> ${customStr}</p>
-              <p style="font-size:12px;color:#e67e22;font-weight:600;">${formatCurrency(item.basePrice)} each</p>
+              <p><i class="fas fa-tag"></i> ${customStr}${sidesStr}</p>
+              <p style="font-size:12px;color:#e67e22;font-weight:600;">${formatCurrency(displayPrice)} each</p>
             </div>
             <div class="qty">
               <button class="qty-minus" data-cart-id="${item.cartItemId}"><i class="fas fa-minus"></i></button>
@@ -2571,8 +2701,8 @@
       });
 
       const subtotal = getCartTotal();
-      const discount = subtotal > 1000 ? 100 : 0;
-      const finalTotal = subtotal - discount;
+      const comboDiscount = getComboDiscount();
+      const finalTotal = subtotal - comboDiscount;
 
       cartContent.innerHTML = `
         <div style="padding-bottom:4px;">
@@ -2581,8 +2711,7 @@
         <div class="cart-footer">
           <div class="cart-summary">
             <div class="row"><span><i class="fas fa-receipt"></i> Subtotal</span><span class="amount">${formatCurrency(subtotal)}</span></div>
-            <div class="row"><span><i class="fas fa-concierge-bell"></i> Service fee</span><span class="amount">¥0</span></div>
-            ${discount>0?`<div class="row" style="color:#10b981;"><span><i class="fas fa-gem"></i> Discount</span><span class="amount">-${formatCurrency(discount)}</span></div>`:''}
+            ${comboDiscount > 0 ? `<div class="row" style="color:#e67e22;"><span><i class="fas fa-tags"></i> ${t('comboDiscount')}</span><span class="amount">-${formatCurrency(comboDiscount)}</span></div>` : ''}
             <div class="row total"><span><i class="fas fa-yen-sign"></i> Total</span><span class="amount total-amount" id="cartTotalDisplay">${formatCurrency(finalTotal)}</span></div>
           </div>
           <div class="checkout-form">
@@ -2645,7 +2774,8 @@
           const note = document.getElementById('orderNote')?.value || '';
           const orderItems = cart.map(item => {
             const mi = getItemById(item.menuItemId);
-            return { name: mi.name, quantity: item.quantity, price: item.basePrice, custom: item.customizations };
+            return { name: mi.name, quantity: item.quantity, price: item.effectivePrice || item.basePrice,
+              custom: item.customizations, sides: item.sides || [] };
           });
           const order = {
             id: generateId(),
@@ -2749,13 +2879,20 @@
             const mi = menuItems.find(i => i.name === item.name);
             if (mi) {
               const custom = item.custom || { rice: 'White', protein: 'Tuna', sauce: 'Sriracha', addons: [] };
+              const sides = item.sides || [];
               const existing = cart.find(c => c.menuItemId === mi.id && c.customizations.rice === custom.rice &&
                 c.customizations.protein === custom.protein && c.customizations.sauce === custom.sauce &&
-                JSON.stringify(c.customizations.addons) === JSON.stringify(custom.addons));
+                JSON.stringify(c.customizations.addons) === JSON.stringify(custom.addons) &&
+                JSON.stringify(c.sides) === JSON.stringify(sides));
               if (existing) existing.quantity += item.quantity;
               else {
-                cart.push({ menuItemId: mi.id, customizations: custom, quantity: item.quantity, basePrice: mi
-                    .price, cartItemId: ++cartItemIdCounter });
+                const sidesPrice = sides.reduce((sum, s) => {
+                  const opt = optSides.querySelector(`[data-value="${s}"]`);
+                  return sum + (opt ? parseInt(opt.dataset.price) : 0);
+                }, 0);
+                const effectivePrice = mi.price + sidesPrice;
+                cart.push({ menuItemId: mi.id, customizations: custom, sides: sides, quantity: item.quantity,
+                  basePrice: mi.price, effectivePrice: effectivePrice, cartItemId: ++cartItemIdCounter });
               }
             }
           });
@@ -3022,11 +3159,12 @@
       if (!item) return;
       modalTargetItemId = itemId;
       modalItemName.textContent = item.name;
-      modalSelected = { rice: 'White', protein: 'Tuna', sauce: 'Sriracha', addons: [] };
+      modalSelected = { rice: 'White', protein: 'Tuna', sauce: 'Sriracha', addons: [], sides: [] };
       optRice.querySelectorAll('.opt').forEach(el => el.classList.toggle('active', el.dataset.value === 'White'));
       optProtein.querySelectorAll('.opt').forEach(el => el.classList.toggle('active', el.dataset.value === 'Tuna'));
       optSauce.querySelectorAll('.opt').forEach(el => el.classList.toggle('active', el.dataset.value === 'Sriracha'));
       optAddons.querySelectorAll('.opt').forEach(el => el.classList.remove('active'));
+      optSides.querySelectorAll('.opt').forEach(el => el.classList.remove('active'));
       modalOverlay.classList.add('active');
       setTimeout(() => modalConfirm.focus(), 100);
     }
@@ -3065,6 +3203,19 @@
             el.click(); }
         });
       });
+      optSides.querySelectorAll('.opt').forEach(el => {
+        el.addEventListener('click', () => {
+          el.classList.toggle('active');
+          const val = el.dataset.value;
+          const idx = modalSelected.sides.indexOf(val);
+          if (idx > -1) modalSelected.sides.splice(idx, 1);
+          else modalSelected.sides.push(val);
+        });
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault();
+            el.click(); }
+        });
+      });
     }
 
     modalCancel.addEventListener('click', closeModal);
@@ -3078,13 +3229,31 @@
         sauce: modalSelected.sauce || 'Sriracha',
         addons: [...modalSelected.addons]
       };
-      const existing = cart.find(c => c.menuItemId === modalTargetItemId && c.customizations.rice === custom.rice &&
-        c.customizations.protein === custom.protein && c.customizations.sauce === custom.sauce &&
-        JSON.stringify(c.customizations.addons) === JSON.stringify(custom.addons));
+      const sides = [...modalSelected.sides];
+      let sidesPrice = 0;
+      sides.forEach(s => {
+        const opt = optSides.querySelector(`[data-value="${s}"]`);
+        if (opt) sidesPrice += parseInt(opt.dataset.price);
+      });
+      const effectivePrice = item.price + sidesPrice;
+
+      const existing = cart.find(c => c.menuItemId === modalTargetItemId &&
+        c.customizations.rice === custom.rice &&
+        c.customizations.protein === custom.protein &&
+        c.customizations.sauce === custom.sauce &&
+        JSON.stringify(c.customizations.addons) === JSON.stringify(custom.addons) &&
+        JSON.stringify(c.sides) === JSON.stringify(sides));
       if (existing) existing.quantity++;
       else {
-        cart.push({ menuItemId: modalTargetItemId, customizations: custom, quantity: 1, basePrice: item.price,
-          cartItemId: ++cartItemIdCounter });
+        cart.push({
+          menuItemId: modalTargetItemId,
+          customizations: custom,
+          sides: sides,
+          quantity: 1,
+          basePrice: item.price,
+          effectivePrice: effectivePrice,
+          cartItemId: ++cartItemIdCounter
+        });
       }
       saveData();
       renderCart();
@@ -3156,8 +3325,9 @@
       const desc = newDesc.value.trim();
       const tags = newTags.value.split(',').map(s => s.trim()).filter(Boolean);
       if (!name || isNaN(price) || price <= 0) { toast(t('toastFillFields'), 'error'); return; }
+      const category = price < 300 ? 'budget' : (price < 350 ? 'standard' : 'premium');
       const newItem = { id: nextItemId++, name, price, description: desc || 'Delicious onigirazu', tags: tags.length ?
-          tags : ['custom'], emoji: '🍙', badge: '' };
+          tags : ['custom'], emoji: '🍙', badge: price > 300 ? 'Premium' : '', category: category };
       menuItems.push(newItem);
       saveData();
       renderMenuManagement();
@@ -3273,12 +3443,12 @@
         const s1 = {
           id: generateId(),
           items: [
-            { name: 'Spicy Tuna', quantity: 2, price: 350, custom: { rice: 'White', protein: 'Tuna',
-                sauce: 'Sriracha', addons: ['Avocado'] } },
-            { name: 'Teriyaki Chicken', quantity: 1, price: 400, custom: { rice: 'Brown', protein: 'Chicken',
-                sauce: 'Teriyaki', addons: ['Sesame'] } }
+            { name: 'Spicy Tuna', quantity: 2, price: 290, custom: { rice: 'White', protein: 'Tuna',
+                sauce: 'Sriracha', addons: ['Avocado'] }, sides: ['Miso Soup'] },
+            { name: 'Teriyaki Chicken', quantity: 1, price: 250, custom: { rice: 'Brown', protein: 'Chicken',
+                sauce: 'Teriyaki', addons: ['Sesame'] }, sides: ['Tea'] }
           ],
-          total: 1100 - 100,
+          total: 830 - 50,
           status: 'ready',
           timestamp: new Date(Date.now() - 3600000).toLocaleString(),
           pickupTime: '12:15',
@@ -3293,10 +3463,10 @@
         const s2 = {
           id: generateId(),
           items: [
-            { name: 'Veggie Rainbow', quantity: 1, price: 300, custom: { rice: 'Mixed', protein: 'Tofu',
-                sauce: 'None', addons: ['Kimchi'] } }
+            { name: 'Veggie Rainbow', quantity: 1, price: 220, custom: { rice: 'Mixed', protein: 'Tofu',
+                sauce: 'None', addons: ['Kimchi'] }, sides: [] }
           ],
-          total: 300,
+          total: 220,
           status: 'preparing',
           timestamp: new Date(Date.now() - 1800000).toLocaleString(),
           pickupTime: '12:45',
@@ -3311,10 +3481,10 @@
         const s3 = {
           id: generateId(),
           items: [
-            { name: 'Salmon Miso', quantity: 1, price: 420, custom: { rice: 'White', protein: 'Tuna',
-                sauce: 'Teriyaki', addons: ['Cheese'] } }
+            { name: 'Salmon Miso', quantity: 1, price: 390, custom: { rice: 'White', protein: 'Tuna',
+                sauce: 'Teriyaki', addons: ['Cheese'] }, sides: ['Miso Soup'] }
           ],
-          total: 420,
+          total: 490,
           status: 'received',
           timestamp: new Date(Date.now() - 600000).toLocaleString(),
           pickupTime: '13:00',
