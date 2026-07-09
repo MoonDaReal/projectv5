@@ -167,9 +167,7 @@
       padding: 4px 8px;
       transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .header-controls .theme-btn.rotated {
-      transform: rotate(360deg);
-    }
+    /* Rotation now handled by JS with continuous spin, so we keep transition only */
 
     /* ─── ROLE TOGGLE ─── */
     .role-toggle-wrap {
@@ -1307,7 +1305,7 @@
       }
     }
 
-    /* ─── MODAL ─── */
+    /* ─── MODAL (for customization & confirmation) ─── */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -2083,7 +2081,7 @@
 
   </div> <!-- closes .app -->
 
-  <!-- ─── MODAL ─── -->
+  <!-- ─── MODAL FOR CUSTOMIZATION ─── -->
   <div class="modal-overlay" id="customModal">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <h2 id="modalTitle"><i class="fas fa-pencil-alt" style="color:#e67e22;"></i> <span data-key="modalTitle">Customize your onigirazu</span></h2>
@@ -2143,6 +2141,20 @@
     </div>
   </div>
 
+  <!-- ─── CONFIRMATION MODAL ─── -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <h2 id="confirmTitle" style="font-family: 'Inter', 'Noto Sans JP', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 2px; color: #1a1a2e;">
+        <i class="fas fa-exclamation-triangle" style="color:#e67e22;"></i> <span id="confirmTitleText">Confirm</span>
+      </h2>
+      <p class="sub" id="confirmMessage" style="color:#6b7280; font-size:14px; margin-bottom: var(--space-lg);">Are you sure?</p>
+      <div class="modal-actions">
+        <button class="cancel" id="confirmCancel" data-key="modalCancel"><i class="fas fa-times"></i> Cancel</button>
+        <button class="confirm" id="confirmOk" style="background: #ef4444; color: #ffffff;"><i class="fas fa-check"></i> OK</button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
@@ -2167,7 +2179,7 @@
     ];
 
     let menuItems = [];
-    let nextItemId = 6;
+    let nextItemId = 1; // will be computed
     let cart = [];
     let cartItemIdCounter = 0;
     let orders = [];
@@ -2180,6 +2192,9 @@
     let searchQuery = '';
     let adminFilter = 'all';
     let darkMode = false;
+
+    // For theme rotation: accumulate angle
+    let rotationAngle = 0;
 
     // ────────────────────────────────────────────────────────
     // LOCAL STORAGE
@@ -2217,23 +2232,30 @@
         const cId = localStorage.getItem('momentu_cartItemIdCounter');
         if (menu) {
           menuItems = JSON.parse(menu);
-          menuItems = menuItems.filter(item =>
-            item.name.toLowerCase() !== 'katsu curry' &&
-            item.name.toLowerCase() !== 'kalsu curry'
-          );
-          if (menuItems.length < 4) {
-            menuItems = JSON.parse(JSON.stringify(MENU_DEFAULT));
-          }
+          // No filtering — we trust the stored data
         } else {
           menuItems = JSON.parse(JSON.stringify(MENU_DEFAULT));
         }
+        // Ensure menuItems is valid and has the correct structure
+        if (!Array.isArray(menuItems) || menuItems.length === 0) {
+          menuItems = JSON.parse(JSON.stringify(MENU_DEFAULT));
+        }
+        // Compute nextItemId from current menu
+        nextItemId = Math.max(...menuItems.map(m => m.id), 0) + 1;
+
         if (cartData) cart = JSON.parse(cartData);
         if (ordersData) orders = JSON.parse(ordersData);
-        if (nId) nextItemId = parseInt(nId);
+        if (nId) nextItemId = Math.max(nextItemId, parseInt(nId));
         if (nOId) nextOrderId = parseInt(nOId);
         if (cId) cartItemIdCounter = parseInt(cId);
       } catch (e) {
+        // Fallback to defaults if anything fails
         menuItems = JSON.parse(JSON.stringify(MENU_DEFAULT));
+        nextItemId = Math.max(...menuItems.map(m => m.id)) + 1;
+        cart = [];
+        orders = [];
+        cartItemIdCounter = 0;
+        nextOrderId = 100;
       }
     }
 
@@ -2330,6 +2352,17 @@
         combo3: 'Any 3 Items',
         save50: 'Save ¥50',
         comboDiscount: 'Combo Discount',
+        // New translations for fixed messages
+        toastItemsAdded: 'Items added to cart!',
+        toastEditExpired: 'Edit window expired (5 min).',
+        toastNoOrders: 'No orders to clear.',
+        toastOrdersCleared: 'All orders have been cleared.',
+        confirmClearTitle: 'Clear All Orders?',
+        confirmClearMessage: 'This will permanently delete all orders. This action cannot be undone. Are you sure?',
+        confirmResetTitle: 'Reset Menu?',
+        confirmResetMessage: 'This will restore the default menu and remove any custom items. Are you sure?',
+        confirmYes: 'Yes, proceed',
+        confirmNo: 'Cancel',
       },
       ja: {
         flash: 'フラッシュセール',
@@ -2420,6 +2453,17 @@
         combo3: '3品以上',
         save50: '¥50割引',
         comboDiscount: 'コンボ割引',
+        // Japanese translations for new keys
+        toastItemsAdded: 'アイテムをカートに追加しました！',
+        toastEditExpired: '編集期限が切れました（5分）。',
+        toastNoOrders: '削除する注文がありません。',
+        toastOrdersCleared: 'すべての注文を削除しました。',
+        confirmClearTitle: 'すべての注文を削除しますか？',
+        confirmClearMessage: 'この操作は元に戻せません。本当に実行しますか？',
+        confirmResetTitle: 'メニューをリセットしますか？',
+        confirmResetMessage: 'デフォルトのメニューに戻し、カスタムアイテムは削除されます。よろしいですか？',
+        confirmYes: 'はい、実行する',
+        confirmNo: 'キャンセル',
       }
     };
 
@@ -2503,6 +2547,15 @@
       adminFilterEl = $('#adminFilter');
     const recommendedCarousel = $('#recommendedCarousel');
     const resetMenuBtn = $('#resetMenuBtn');
+
+    // Confirmation modal elements
+    const confirmModalOverlay = $('#confirmModal');
+    const confirmTitleText = $('#confirmTitleText');
+    const confirmMessage = $('#confirmMessage');
+    const confirmCancel = $('#confirmCancel');
+    const confirmOk = $('#confirmOk');
+
+    let confirmCallback = null; // will be set before showing
 
     // ────────────────────────────────────────────────────────
     // UTILITY
@@ -2595,6 +2648,37 @@
       }
       setTimeout(() => container.remove(), 2500);
     }
+
+    // ────────────────────────────────────────────────────────
+    // CONFIRMATION MODAL
+    // ────────────────────────────────────────────────────────
+    function showConfirmModal(titleKey, messageKey, onConfirm) {
+      confirmTitleText.textContent = t(titleKey);
+      confirmMessage.textContent = t(messageKey);
+      // Update button texts in case language changed
+      confirmCancel.textContent = t('confirmNo');
+      confirmOk.textContent = t('confirmYes');
+      confirmCallback = onConfirm;
+      confirmModalOverlay.classList.add('active');
+    }
+
+    confirmCancel.addEventListener('click', () => {
+      confirmModalOverlay.classList.remove('active');
+      confirmCallback = null;
+    });
+    confirmOk.addEventListener('click', () => {
+      confirmModalOverlay.classList.remove('active');
+      if (typeof confirmCallback === 'function') {
+        confirmCallback();
+        confirmCallback = null;
+      }
+    });
+    confirmModalOverlay.addEventListener('click', (e) => {
+      if (e.target === confirmModalOverlay) {
+        confirmModalOverlay.classList.remove('active');
+        confirmCallback = null;
+      }
+    });
 
     // ────────────────────────────────────────────────────────
     // RECOMMENDED CAROUSEL
@@ -2926,7 +3010,7 @@
           });
           saveData();
           renderCart();
-          toast('Items added to cart!', 'success');
+          toast(t('toastItemsAdded'), 'success');
         });
       });
 
@@ -2981,7 +3065,7 @@
           const order = orders.find(o => o.id === orderId);
           if (!order) return;
           if (Date.now() - order.reviewTimestamp > 300000) {
-            toast('Edit window expired (5 min).', 'error');
+            toast(t('toastEditExpired'), 'error');
             return;
           }
           order.reviewed = false;
@@ -3002,6 +3086,8 @@
       const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
       const pending = orders.filter(o => o.status === 'received' || o.status === 'preparing').length;
       const ready = orders.filter(o => o.status === 'ready').length;
+      // Placeholder sparkline data — real data can be derived from orders later
+      // For now, we keep the dummy to show a visual pattern.
       const sparkData = [10, 35, 20, 50, 30, 40, 25];
       const maxSpark = Math.max(...sparkData);
       adminStats.innerHTML = `
@@ -3180,7 +3266,7 @@
     }
 
     // ────────────────────────────────────────────────────────
-    // MODAL
+    // MODAL (customization)
     // ────────────────────────────────────────────────────────
     function openCustomModal(itemId) {
       const item = getItemById(itemId);
@@ -3416,28 +3502,29 @@
     if (clearOrdersBtn) {
       clearOrdersBtn.addEventListener('click', function() {
         if (orders.length === 0) {
-          toast('No orders to clear.', 'info');
+          toast(t('toastNoOrders'), 'info');
           return;
         }
-        if (confirm('Are you sure you want to delete ALL orders? This action cannot be undone!')) {
+        showConfirmModal('confirmClearTitle', 'confirmClearMessage', () => {
           orders = [];
           saveData();
           renderAdminDashboard();
           renderOrders();
           renderReports();
-          toast('All orders have been cleared.', 'success');
-        }
+          toast(t('toastOrdersCleared'), 'success');
+        });
       });
     }
 
     if (resetMenuBtn) {
       resetMenuBtn.addEventListener('click', function() {
-        if (confirm('Are you sure you want to reset the menu to default? This will remove any custom items.')) {
+        showConfirmModal('confirmResetTitle', 'confirmResetMessage', () => {
           resetMenuToDefault();
-        }
+        });
       });
     }
 
+    // Theme toggle with continuous rotation
     themeToggle.addEventListener('click', () => {
       darkMode = !darkMode;
       document.body.classList.toggle('dark', darkMode);
@@ -3445,7 +3532,10 @@
       if (icon) {
         icon.className = darkMode ? 'fas fa-sun' : 'fas fa-moon';
       }
-      themeToggle.classList.toggle('rotated');
+      // Accumulate rotation angle (180 deg per click for smooth spin)
+      rotationAngle += 180;
+      themeToggle.style.transform = `rotate(${rotationAngle}deg)`;
+      // Remove the .rotated class usage; we control transform directly
     });
 
     langEn.addEventListener('click', () => {
