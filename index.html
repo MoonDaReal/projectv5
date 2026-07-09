@@ -7,7 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <!-- UPDATED: stable Font Awesome 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
     /* ═══════════════════════════════════════════════════════════════
        MOMENTU 2.0 · Complete Production‑Ready Website
@@ -947,7 +948,7 @@
   <!-- ===================== JAVASCRIPT ===================== -->
   <script>
     // ═══════════════════════════════════════════════════════════════
-    // MOMENTU 2.0 · Full Application Logic (with extended checkout & admin order details)
+    // MOMENTU 2.0 · Full Application Logic (all fixes applied)
     // Designed & Developed by: Ross Nguyen
     // Year: 2026 | Copyright: MomentU
     // ═══════════════════════════════════════════════════════════════
@@ -1042,6 +1043,9 @@
         preparingTimeline:'Preparing', readyTimeline:'Ready for pickup', completedTimeline:'Completed',
         pendingTimeline:'Pending', cancelledTimeline:'Cancelled',
         specialRequestPlaceholder:'Optional (e.g. No mayonnaise, Extra sauce, Allergies)',
+        pickupTime:'Pickup Time',  // ADDED missing key
+        toastItemsAdded:'Items added to cart!',
+        toastEditExpired:'Edit window expired (5 min).',
       },
       ja: {
         ann1:'🍙 毎日焼きたてのおにぎらず — 早くて美味しい', ann2:'💰 ¥220から', ann3:'🕐 24時間営業 — いつでも注文OK', ann4:'🥬 毎日新鮮な食材', ann5:'⚡ 5分で受け取り可能',
@@ -1108,6 +1112,9 @@
         preparingTimeline:'準備中', readyTimeline:'受け取り可能', completedTimeline:'完了',
         pendingTimeline:'保留中', cancelledTimeline:'キャンセル',
         specialRequestPlaceholder:'例: マヨネーズ抜き、ソース多め、アレルギー情報',
+        pickupTime:'受け取り時間',  // ADDED
+        toastItemsAdded:'アイテムをカートに追加しました！',
+        toastEditExpired:'編集期限が切れました（5分）。',
       }
     };
 
@@ -1587,7 +1594,7 @@
             }
           }
         });
-        saveData(); renderCart(); toast('Items added!', 'success');
+        saveData(); renderCart(); toast(t('toastItemsAdded'), 'success');  // FIXED hardcoded
       }));
 
       container.querySelectorAll('.review-section').forEach(sec => {
@@ -1615,7 +1622,10 @@
       container.querySelectorAll('.btn-edit-review').forEach(btn => btn.addEventListener('click', () => {
         const o = orders.find(o => o.id === parseInt(btn.dataset.oid));
         if (!o) return;
-        if (Date.now() - o.reviewTimestamp > 300000) { toast('Edit window expired.', 'error'); return; }
+        if (Date.now() - o.reviewTimestamp > 300000) {
+          toast(t('toastEditExpired'), 'error');  // FIXED hardcoded
+          return;
+        }
         o.reviewed = false; o.rating = 0; o.reviewText = '';
         saveData(); renderOrders();
       }));
