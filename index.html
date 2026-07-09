@@ -813,7 +813,18 @@
           </div>
           <div class="admin-table-wrapper">
             <table class="admin-order-table" id="adminOrderTable">
-              <thead><tr><th scope="col">#ID</th><th scope="col"><span data-key="customer">Customer</span></th><th scope="col"><span data-key="items">Items</span></th><th scope="col"><span data-key="qty">Qty</span></th><th scope="col"><span data-key="note_col">Note</span></th><th scope="col"><span data-key="total">Total</span></th><th scope="col"><span data-key="status">Status</span></th><th scope="col">Time</th><th scope="col"><span data-key="action">Action</span></th></tr></thead>
+              <thead><tr>
+                <th scope="col">#ID</th>
+                <th scope="col"><span data-key="customer">Customer</span></th>
+                <th scope="col"><span data-key="items">Items</span></th>
+                <th scope="col"><span data-key="qty">Qty</span></th>
+                <th scope="col"><span data-key="note_col">Note</span></th>
+                <th scope="col"><span data-key="total">Total</span></th>
+                <th scope="col"><span data-key="status">Status</span></th>
+                <th scope="col">Time</th>
+                <th scope="col">⭐ Review</th>
+                <th scope="col"><span data-key="action">Action</span></th>
+              </tr></thead>
               <tbody id="adminOrderList"></tbody>
             </table>
           </div>
@@ -885,7 +896,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span data-key="footerCopy">© 2026 MomentU · Designed & Developed by <strong style="color:#e67e22;">Ross Nguyen</strong></span>
+      <span data-key="footerCopy1">© 2026 MomentU · Designed & Developed by </span><strong style="color:#e67e22;">Ross Nguyen</strong>
       <br><a href="#hero" class="back-to-top"><i class="fas fa-arrow-up"></i> <span data-key="backToTop">Back to top</span></a>
     </div>
   </footer>
@@ -974,7 +985,7 @@
         footerBrand:'Fresh, customizable onigirazu made daily with premium ingredients.', footerQuickLinks:'Quick Links', footerMenu:'Menu', footerHow:'How It Works', footerCombo:'Combos', footerLocation:'Location',
         footerHours:'Hours', footerDays:'Monday – Sunday', footer24h:'24 Hours', footerFresh:'Freshly Prepared',
         footerContact:'Contact', footerAddress:'Tokyo, Japan', footerPhone:'+81 3-1234-5678', footerEmail:'hello@momentu.jp',
-        footerCopy:'© 2026 MomentU · Designed & Developed by <strong style="color:#e67e22;">Ross Nguyen</strong>', backToTop:'Back to top',
+        footerCopy1:'© 2026 MomentU · Designed & Developed by ', backToTop:'Back to top',
         adminLabel:'Admin Panel', adminTitle:'Dashboard', adminLiveOrders:'Live Orders', adminClearAll:'Clear All',
         adminMenuMgmt:'Menu Management', adminAddItem:'Add to Menu', adminResetMenu:'Reset to Default', adminReports:'Reports',
         statusReceived:'Received', statusPreparing:'Preparing', statusReady:'Ready',
@@ -1018,7 +1029,7 @@
         footerQuickLinks:'クイックリンク', footerMenu:'メニュー', footerHow:'使い方', footerCombo:'コンボ', footerLocation:'アクセス',
         footerHours:'営業時間', footerDays:'月曜〜日曜', footer24h:'24時間', footerFresh:'出来たて',
         footerContact:'お問い合わせ', footerAddress:'東京都', footerPhone:'03-1234-5678', footerEmail:'hello@momentu.jp',
-        footerCopy:'© 2026 MomentU · Designed & Developed by <strong style="color:#e67e22;">Ross Nguyen</strong>', backToTop:'トップへ戻る',
+        footerCopy1:'© 2026 MomentU · Designed & Developed by ', backToTop:'トップへ戻る',
         adminLabel:'管理パネル', adminTitle:'ダッシュボード', adminLiveOrders:'注文一覧', adminClearAll:'すべて削除',
         adminMenuMgmt:'メニュー管理', adminAddItem:'メニューに追加', adminResetMenu:'デフォルトに戻す', adminReports:'レポート',
         statusReceived:'受付済み', statusPreparing:'準備中', statusReady:'受取可能',
@@ -1385,7 +1396,7 @@
       if (!tbody) return;
       let filtered = adminFilter === 'all' ? orders : orders.filter(o => o.status === adminFilter);
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:var(--space-6);color:var(--text-tertiary);">No orders</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:var(--space-6);color:var(--text-tertiary);">No orders</td></tr>`;
         return;
       }
       const statusMap = { received: t('statusReceived'), preparing: t('statusPreparing'), ready: t('statusReady') };
@@ -1393,6 +1404,15 @@
         const isReady = o.status === 'ready';
         const wait = Math.floor((Date.now() - o.createdAt) / 60000);
         const waitDisplay = wait < 1 ? t('newOrder') : `${wait}m`;
+        let reviewHtml = '';
+        if (o.reviewed && o.rating > 0) {
+          const stars = '★'.repeat(o.rating) + '☆'.repeat(5 - o.rating);
+          reviewHtml = `<span style="color:#f59e0b;">${stars}</span><br><span style="font-size:11px;color:var(--text-secondary);">${o.reviewText || ''}</span>`;
+        } else if (o.status === 'ready' && !o.reviewed) {
+          reviewHtml = `<span style="color:var(--text-tertiary);">${t('noReview')}</span>`;
+        } else {
+          reviewHtml = `<span style="color:var(--text-tertiary);">—</span>`;
+        }
         return `
           <tr>
             <td><strong>#${o.id}</strong></td>
@@ -1403,6 +1423,7 @@
             <td>${formatCurrency(o.total)}</td>
             <td><span class="status-badge ${o.status}">${statusMap[o.status] || o.status}</span></td>
             <td style="font-size:0.75rem;color:var(--text-secondary);">${o.timestamp}<br><span style="font-size:0.625rem;">⏳ ${waitDisplay}</span></td>
+            <td>${reviewHtml}</td>
             <td>
               <button class="btn-action btn-update-status" data-id="${o.id}" ${isReady ? 'disabled' : ''}>
                 ${isReady ? '✔ Completed' : 'Advance'}
