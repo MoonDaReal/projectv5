@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <!-- UPDATED: stable Font Awesome 6.5.1 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
     /* ═══════════════════════════════════════════════════════════════
@@ -1026,7 +1025,7 @@
         pickupLocation:'Pickup Location', deliveryAddress:'Delivery Address', building:'Building / Dormitory', roomNumber:'Room Number (optional)',
         specialRequest:'Special Request', asap:'ASAP', selectTime:'Select Time',
         gotenyamaCampus:'Gotenyama Campus', nakamiyaCampus:'Nakamiya Campus',
-        cafeteria:'Cafeteria', firstCafeteria:'1st Cafeteria', thirdCafeteria:'3rd Cafeteria', frontICC:'Front ICC Restaurant',
+        cafeteria:'Cafeteria', firstCafeteria:'1st Cafeteria', secondCafeteria:'3rd Cafeteria', frontICC:'Front ICC Restaurant',
         confirmTitle:'Order Confirmed!', confirmOrderNumber:'Order #', confirmThankYou:'Thank you, ', confirmEstimate:'Estimated preparation time', confirmContact:'We\'ll contact you at', confirmPickupAt:'Pickup Location:',
         confirmDeliveryAt:'Delivery Address:', confirmSeeYou:'Thank you for choosing MomentU! See you soon 🍙',
         closeBtn:'Close', validationName:'Please enter your name.', validationPhone:'Please enter your phone number.',
@@ -1043,7 +1042,7 @@
         preparingTimeline:'Preparing', readyTimeline:'Ready for pickup', completedTimeline:'Completed',
         pendingTimeline:'Pending', cancelledTimeline:'Cancelled',
         specialRequestPlaceholder:'Optional (e.g. No mayonnaise, Extra sauce, Allergies)',
-        pickupTime:'Pickup Time',  // ADDED missing key
+        pickupTime:'Pickup Time',
         toastItemsAdded:'Items added to cart!',
         toastEditExpired:'Edit window expired (5 min).',
       },
@@ -1095,7 +1094,7 @@
         pickupLocation:'受け取り場所', deliveryAddress:'配送先住所', building:'建物・寮名', roomNumber:'部屋番号 (任意)',
         specialRequest:'特別リクエスト', asap:'できるだけ早く', selectTime:'時間を選択',
         gotenyamaCampus:'御殿山キャンパス', nakamiyaCampus:'中宮キャンパス',
-        cafeteria:'カフェテリア', firstCafeteria:'第一食堂', thirdCafeteria:'第三食堂', frontICC:'ICCの前',
+        cafeteria:'カフェテリア', firstCafeteria:'第一食堂', secondCafeteria:'第三食堂', frontICC:'ICCの前',
         confirmTitle:'注文確定！', confirmOrderNumber:'注文番号 #', confirmThankYou:'ありがとうございます、', confirmEstimate:'調理時間の目安', confirmContact:'こちらにご連絡いたします', confirmPickupAt:'受け取り場所:',
         confirmDeliveryAt:'配送先住所:', confirmSeeYou:'MomentUをご利用いただきありがとうございます！またお会いしましょう 🍙',
         closeBtn:'閉じる', validationName:'お名前を入力してください。', validationPhone:'電話番号を入力してください。',
@@ -1112,7 +1111,7 @@
         preparingTimeline:'準備中', readyTimeline:'受け取り可能', completedTimeline:'完了',
         pendingTimeline:'保留中', cancelledTimeline:'キャンセル',
         specialRequestPlaceholder:'例: マヨネーズ抜き、ソース多め、アレルギー情報',
-        pickupTime:'受け取り時間',  // ADDED
+        pickupTime:'受け取り時間',
         toastItemsAdded:'アイテムをカートに追加しました！',
         toastEditExpired:'編集期限が切れました（5分）。',
       }
@@ -1322,7 +1321,7 @@
                 </optgroup>
                 <optgroup label="${t('nakamiyaCampus')}">
                   <option value="Nakamiya 1st Cafeteria">${t('firstCafeteria')}</option>
-                  <option value="Nakamiya 3rd Cafeteria">${t('thirdCafeteria')}</option>
+                  <option value="Nakamiya 2nd Cafeteria">${t('secondCafeteria')}</option>
                   <option value="Front ICC">${t('frontICC')}</option>
                 </optgroup>
               </select>
@@ -1594,7 +1593,7 @@
             }
           }
         });
-        saveData(); renderCart(); toast(t('toastItemsAdded'), 'success');  // FIXED hardcoded
+        saveData(); renderCart(); toast(t('toastItemsAdded'), 'success');
       }));
 
       container.querySelectorAll('.review-section').forEach(sec => {
@@ -1623,7 +1622,7 @@
         const o = orders.find(o => o.id === parseInt(btn.dataset.oid));
         if (!o) return;
         if (Date.now() - o.reviewTimestamp > 300000) {
-          toast(t('toastEditExpired'), 'error');  // FIXED hardcoded
+          toast(t('toastEditExpired'), 'error');
           return;
         }
         o.reviewed = false; o.rating = 0; o.reviewText = '';
