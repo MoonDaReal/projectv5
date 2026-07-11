@@ -814,7 +814,7 @@
           </div>
           <div class="admin-table-wrapper">
             <table class="admin-order-table" id="adminOrderTable">
-              <thead><tr><th scope="col">#ID</th><th scope="col"><span data-key="customer">Customer</span></th><th scope="col"><span data-key="items">Items</span></th><th scope="col"><span data-key="qty">Qty</span></th><th scope="col"><span data-key="note_col">Note</span></th><th scope="col"><span data-key="total">Total</span></th><th scope="col"><span data-key="status">Status</span></th><th scope="col">Time</th><th scope="col">⭐ Review</th><th scope="col"><span data-key="action">Action</span></th></tr></thead>
+              <thead><tr><th scope="col">#ID</th><th scope="col"><span data-key="customer">Customer</span></th><th scope="col"><span data-key="items">Items</span></th><th scope="col"><span data-key="qty">Qty</span></th><th scope="col"><span data-key="note_col">Note</span></th><th scope="col"><span data-key="total">Total</span></th><th scope="col"><span data-key="status">Status</span></th><th scope="col"><span data-key="time">Time</span></th><th scope="col">⭐ <span data-key="review">Review</span></th><th scope="col"><span data-key="action">Action</span></th></tr></thead>
               <tbody id="adminOrderList"></tbody>
             </table>
           </div>
@@ -843,12 +843,12 @@
           <h2 class="section-title" id="adminReportsTitle" data-key="adminReports">Reports</h2>
           <div class="report-card">
             <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-2);">
-              <span style="font-weight:600;" data-key="aLastDays">Last 5 days</span>
-              <span><span data-key="aTotal">Total</span>: ¥<span id="reportTotal">0</span></span>
+              <span style="font-weight:600;" id="reportDateLabel">Last 5 days</span>
+              <span><span id="reportTotalLabel">Total</span>: ¥<span id="reportTotal">0</span></span>
             </div>
             <div class="chart-container" id="chartBars"></div>
             <div class="top-items-list">
-              <div style="font-weight:700;margin-bottom:var(--space-2);">🥇 <span data-key="aTopSelling">Top selling items</span></div>
+              <div style="font-weight:700;margin-bottom:var(--space-2);">🥇 <span id="reportTopSellingLabel">Top selling items</span></div>
               <div id="topItemsList"></div>
             </div>
           </div>
@@ -891,7 +891,7 @@
     </div>
   </footer>
 
-  <!-- Modals -->
+  <!-- Modals (unchanged) -->
   <div class="modal-overlay" id="customModal" role="dialog" aria-modal="true" aria-labelledby="customModalTitle">
     <div class="modal">
       <h2 id="customModalTitle"><i class="fas fa-pencil-alt" style="color:var(--orange);"></i> <span data-key="modalTitle">Customize Your Onigirazu</span></h2>
@@ -947,7 +947,7 @@
   <!-- ===================== JAVASCRIPT ===================== -->
   <script>
     // ═══════════════════════════════════════════════════════════════
-    // MOMENTU 2.0 · Full Application Logic (all fixes applied)
+    // MOMENTU 2.0 · Full Application Logic (admin table & menu management translations)
     // Designed & Developed by: Ross Nguyen
     // Year: 2026 | Copyright: MomentU
     // ═══════════════════════════════════════════════════════════════
@@ -1018,6 +1018,7 @@
         noReview:'Not reviewed.', filterAll:'All', filterReceived:'Received', filterPreparing:'Preparing', filterReady:'Ready',
         aDash:'Dashboard', aRevenue:'Revenue', aLiveOrders:'Live Orders', aAddItem:'Add Item', aCurrentMenu:'Current Menu',
         customer:'Customer', items:'Items', qty:'Qty', total:'Total', status:'Status', action:'Action', note_col:'Note',
+        time:'Time', review:'Review',  // admin table headers
         orderNotePlaceholder:'Special notes (optional)', adminNote:'Note', addNamePlaceholder:'Item name', addPricePlaceholder:'Price (¥)', addDescPlaceholder:'Description', addTagsPlaceholder:'Tags (comma)',
         ariaCartCount:'%s items in cart', ariaIncreaseQty:'Increase quantity', ariaDecreaseQty:'Decrease quantity', ariaRemoveItem:'Remove item',
         ariaClose:'Close', mapPlaceholder:'Google Maps location', each:'each',
@@ -1045,6 +1046,42 @@
         pickupTime:'Pickup Time',
         toastItemsAdded:'Items added to cart!',
         toastEditExpired:'Edit window expired (5 min).',
+        pendingLabel:'Pending',
+        advanceBtn:'Advance',
+        completedBtn:'✔ Completed',
+        deleteBtn:'Delete',
+        soldLabel:'sold',
+        aLastDays:'Last 5 days',
+        aTotal:'Total',
+        aTopSelling:'Top selling items',
+        // Menu item translations
+        itemSpicyTuna:'Spicy Tuna',
+        descSpicyTuna:'with avocado & sriracha',
+        itemTeriyakiChicken:'Teriyaki Chicken',
+        descTeriyakiChicken:'grilled with sesame',
+        itemVeggieRainbow:'Veggie Rainbow',
+        descVeggieRainbow:'fresh & healthy',
+        itemSalmonMiso:'Salmon Miso',
+        descSalmonMiso:'miso-glazed salmon',
+        badgeBestSeller:'Best Seller',
+        badgePremium:'Premium',
+        // Modal option translations
+        riceWhite:'White',
+        riceBrown:'Brown',
+        riceMixed:'Mixed',
+        proteinTuna:'Tuna',
+        proteinChicken:'Chicken',
+        proteinTofu:'Tofu',
+        sauceSriracha:'Sriracha',
+        sauceMayo:'Mayo',
+        sauceTeriyaki:'Teriyaki',
+        sauceNone:'None',
+        addonAvocado:'Avocado',
+        addonSesame:'Sesame',
+        addonKimchi:'Kimchi',
+        addonCheese:'Cheese',
+        sideMisoSoup:'Miso Soup',
+        sideTea:'Tea',
       },
       ja: {
         ann1:'🍙 毎日焼きたてのおにぎらず — 早くて美味しい', ann2:'💰 ¥220から', ann3:'🕐 24時間営業 — いつでも注文OK', ann4:'🥬 毎日新鮮な食材', ann5:'⚡ 5分で受け取り可能',
@@ -1087,6 +1124,7 @@
         noReview:'未レビュー', filterAll:'すべて', filterReceived:'受付済み', filterPreparing:'準備中', filterReady:'受取可能',
         aDash:'ダッシュボード', aRevenue:'売上', aLiveOrders:'注文一覧', aAddItem:'商品追加', aCurrentMenu:'メニュー',
         customer:'お客様', items:'商品', qty:'数量', total:'合計', status:'ステータス', action:'操作', note_col:'備考',
+        time:'時間', review:'レビュー',  // admin table headers
         orderNotePlaceholder:'特別な注意事項', adminNote:'備考', addNamePlaceholder:'商品名', addPricePlaceholder:'価格 (¥)', addDescPlaceholder:'説明', addTagsPlaceholder:'タグ (カンマ区切り)',
         ariaCartCount:'カートに%s個', ariaIncreaseQty:'数量を増やす', ariaDecreaseQty:'数量を減らす', ariaRemoveItem:'削除',
         ariaClose:'閉じる', mapPlaceholder:'Googleマップ', each:'各',
@@ -1114,6 +1152,42 @@
         pickupTime:'受け取り時間',
         toastItemsAdded:'アイテムをカートに追加しました！',
         toastEditExpired:'編集期限が切れました（5分）。',
+        pendingLabel:'保留中',
+        advanceBtn:'進む',
+        completedBtn:'✔ 完了',
+        deleteBtn:'削除',
+        soldLabel:'個販売',
+        aLastDays:'過去5日間',
+        aTotal:'合計',
+        aTopSelling:'トップ販売アイテム',
+        // Menu item translations
+        itemSpicyTuna:'スパイシーツナ',
+        descSpicyTuna:'アボカドとシラチャーソース',
+        itemTeriyakiChicken:'照り焼きチキン',
+        descTeriyakiChicken:'ごま風味のグリル',
+        itemVeggieRainbow:'ベジタブルレインボー',
+        descVeggieRainbow:'新鮮でヘルシー',
+        itemSalmonMiso:'サーモン味噌',
+        descSalmonMiso:'味噌グレーズサーモン',
+        badgeBestSeller:'人気',
+        badgePremium:'プレミアム',
+        // Modal option translations
+        riceWhite:'白米',
+        riceBrown:'玄米',
+        riceMixed:'混合',
+        proteinTuna:'ツナ',
+        proteinChicken:'チキン',
+        proteinTofu:'豆腐',
+        sauceSriracha:'シラチャー',
+        sauceMayo:'マヨ',
+        sauceTeriyaki:'照り焼き',
+        sauceNone:'なし',
+        addonAvocado:'アボカド',
+        addonSesame:'ごま',
+        addonKimchi:'キムチ',
+        addonCheese:'チーズ',
+        sideMisoSoup:'味噌汁',
+        sideTea:'お茶',
       }
     };
 
@@ -1200,6 +1274,31 @@
       const doubled = [...items, ...items];
       track.innerHTML = `<div class="announcement-track">${doubled.map(msg => `<span class="announcement-item"><span class="dot"></span>${msg}</span>`).join('')}</div>`;
     }
+
+    function getLocalizedItem(item) {
+      const defaultItem = MENU_DEFAULT.find(d => d.id === item.id);
+      if (defaultItem) {
+        const nameKey = 'item' + defaultItem.name.replace(/ /g, '');
+        const descKey = 'desc' + defaultItem.name.replace(/ /g, '');
+        const badge = item.badge;
+        let translatedBadge = badge;
+        if (badge === 'Best Seller') translatedBadge = t('badgeBestSeller');
+        if (badge === 'Premium') translatedBadge = t('badgePremium');
+        return {
+          ...item,
+          name: t(nameKey) || defaultItem.name,
+          description: t(descKey) || defaultItem.description,
+          badge: translatedBadge
+        };
+      }
+      return item;
+    }
+
+    function translateItemName(englishName) {
+      const key = 'item' + englishName.replace(/ /g, '');
+      return t(key) || englishName;
+    }
+
     function renderMenu() {
       const container = document.getElementById('menuGridContainer');
       if (!container) return;
@@ -1222,22 +1321,23 @@
         const label = catNames[cat] || catNames.standard;
         html += `<div class="category-section"><div class="category-header"><h3>${label.emoji} ${label.name}</h3><span class="category-badge ${label.cls}">${catItems.length} ${t('catItems')}</span></div><div class="menu-grid ${currentView === 'list' ? 'list-view' : ''}">`;
         catItems.forEach(item => {
+          const localized = getLocalizedItem(item);
           let badgeHtml = '';
-          if (item.badge) {
-            let cls = item.badge.includes('Best') ? 'bestseller' : item.badge.includes('Premium') ? 'premium' : 'chef';
-            badgeHtml = `<span class="item-badge ${cls}">${item.badge}</span>`;
+          if (localized.badge) {
+            let cls = localized.badge.includes('Best') || localized.badge.includes('人気') ? 'bestseller' : localized.badge.includes('Premium') || localized.badge.includes('プレミアム') ? 'premium' : 'chef';
+            badgeHtml = `<span class="item-badge ${cls}">${localized.badge}</span>`;
           }
           html += `
-          <div class="menu-card" data-id="${item.id}" data-category="${item.category||'standard'}">
-            <div class="food-emoji">${item.emoji || '🍙'}</div>
+          <div class="menu-card" data-id="${localized.id}" data-category="${localized.category||'standard'}">
+            <div class="food-emoji">${localized.emoji || '🍙'}</div>
             <div class="info">
-              <div class="name-row"><h4>${item.name}</h4>${badgeHtml}</div>
-              <p class="desc">${item.description}</p>
-              <div class="tags">${item.tags.map(t => `<span>#${t}</span>`).join('')}</div>
+              <div class="name-row"><h4>${localized.name}</h4>${badgeHtml}</div>
+              <p class="desc">${localized.description}</p>
+              <div class="tags">${localized.tags.map(t => `<span>#${t}</span>`).join('')}</div>
             </div>
             <div class="card-right">
-              <span class="price">${formatCurrency(item.price)}</span>
-              <button class="btn-customize" data-id="${item.id}"><i class="fas fa-pencil-alt"></i> ${t('customizeBtn')}</button>
+              <span class="price">${formatCurrency(localized.price)}</span>
+              <button class="btn-customize" data-id="${localized.id}"><i class="fas fa-pencil-alt"></i> ${t('customizeBtn')}</button>
             </div>
           </div>`;
         });
@@ -1269,12 +1369,13 @@
       cart.forEach(item => {
         const mi = getItemById(item.menuItemId);
         if (!mi) return;
+        const localized = getLocalizedItem(mi);
         const customStr = [item.customizations.rice, item.customizations.protein, item.customizations.sauce, ...item.customizations.addons].filter(Boolean).join(' · ');
         const sidesStr = item.sides?.length ? ' +' + item.sides.join(', ') : '';
         itemsHtml += `
         <div class="cart-item-card">
           <div class="cart-item-details">
-            <h4>${mi.emoji || '🍙'} ${mi.name}</h4>
+            <h4>${localized.emoji || '🍙'} ${localized.name}</h4>
             <p>${customStr}${sidesStr}</p>
             <p style="color:var(--orange);font-weight:600;">${formatCurrency(item.effectivePrice || item.basePrice)} ${t('each')}</p>
           </div>
@@ -1638,7 +1739,7 @@
       stats.innerHTML = `
         <div class="stat-box"><div class="number">${orders.length}</div><div class="label">${t('aDash')}</div></div>
         <div class="stat-box"><div class="number orange">${formatCurrency(rev)}</div><div class="label">${t('aRevenue')}</div></div>
-        <div class="stat-box"><div class="number">${pending}</div><div class="label">Pending</div></div>
+        <div class="stat-box"><div class="number">${pending}</div><div class="label">${t('pendingLabel')}</div></div>
         <div class="stat-box"><div class="number">${ready}</div><div class="label">${t('readyPickup')}</div></div>
       `;
       renderAdminOrders();
@@ -1678,7 +1779,7 @@
             <td>${reviewHtml}</td>
             <td>
               <button class="btn-action btn-update-status" data-id="${o.id}" ${isReady ? 'disabled' : ''}>
-                ${isReady ? '✔ Completed' : 'Advance'}
+                ${isReady ? t('completedBtn') : t('advanceBtn')}
               </button>
             </td>
           </tr>
@@ -1687,7 +1788,7 @@
       // Attach click listeners to open order details
       tbody.querySelectorAll('tr').forEach(row => {
         row.addEventListener('click', (e) => {
-          if (e.target.tagName === 'BUTTON') return; // don't open detail if clicking action button
+          if (e.target.tagName === 'BUTTON') return;
           const id = parseInt(row.dataset.orderId);
           if (id) showOrderDetailModal(id);
         });
@@ -1717,15 +1818,18 @@
     function renderMenuManagement() {
       const list = document.getElementById('menuMgmtList');
       if (!list) return;
-      list.innerHTML = menuItems.map(item => `
-        <div class="menu-mgmt-list-item">
-          <div><strong>${item.emoji || '🍙'} ${item.name}</strong><span style="color:var(--text-secondary);margin-left:var(--space-2);">${item.description}</span></div>
-          <div style="display:flex;align-items:center;gap:var(--space-3);">
-            <span style="font-weight:700;color:var(--orange);">${formatCurrency(item.price)}</span>
-            <button class="btn-action btn-delete-item" data-id="${item.id}" style="color:var(--danger);border-color:var(--danger);"><i class="fas fa-trash-alt"></i> Delete</button>
+      list.innerHTML = menuItems.map(item => {
+        const localized = getLocalizedItem(item);
+        return `
+          <div class="menu-mgmt-list-item">
+            <div><strong>${localized.emoji || '🍙'} ${localized.name}</strong><span style="color:var(--text-secondary);margin-left:var(--space-2);">${localized.description}</span></div>
+            <div style="display:flex;align-items:center;gap:var(--space-3);">
+              <span style="font-weight:700;color:var(--orange);">${formatCurrency(localized.price)}</span>
+              <button class="btn-action btn-delete-item" data-id="${localized.id}" style="color:var(--danger);border-color:var(--danger);"><i class="fas fa-trash-alt"></i> ${t('deleteBtn')}</button>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
       list.querySelectorAll('.btn-delete-item').forEach(btn => btn.addEventListener('click', () => {
         const id = parseInt(btn.dataset.id);
         menuItems = menuItems.filter(i => i.id !== id);
@@ -1740,6 +1844,11 @@
       const reportTotal = document.getElementById('reportTotal');
       const topItemsList = document.getElementById('topItemsList');
       if (!chartBars || !reportTotal || !topItemsList) return;
+
+      document.getElementById('reportDateLabel').textContent = t('aLastDays');
+      document.getElementById('reportTotalLabel').textContent = t('aTotal');
+      document.getElementById('reportTopSellingLabel').textContent = t('aTopSelling');
+
       const days = ['Mon','Tue','Wed','Thu','Fri'];
       const revenueMap = {};
       orders.forEach(o => { const day = days[Math.floor(Math.random() * 5)]; revenueMap[day] = (revenueMap[day] || 0) + o.total; });
@@ -1755,33 +1864,34 @@
       orders.forEach(o => { o.items.forEach(i => { itemCount[i.name] = (itemCount[i.name] || 0) + i.quantity; }); });
       const sorted = Object.entries(itemCount).sort((a,b) => b[1] - a[1]).slice(0,3);
       if (sorted.length === 0) topItemsList.innerHTML = '<div style="color:var(--text-tertiary);">No data yet.</div>';
-      else topItemsList.innerHTML = sorted.map(([name,qty]) => `<div class="top-item"><span class="item-name"><i class="fas fa-crown"></i> ${name}</span><span>${qty} sold</span></div>`).join('');
+      else topItemsList.innerHTML = sorted.map(([name,qty]) => `<div class="top-item"><span class="item-name"><i class="fas fa-crown"></i> ${translateItemName(name)}</span><span>${qty} ${t('soldLabel')}</span></div>`).join('');
     }
     function openCustomModal(itemId) {
       const item = getItemById(itemId);
       if (!item) return;
+      const localized = getLocalizedItem(item);
       modalTargetItemId = itemId;
-      document.getElementById('modalItemName').textContent = item.name;
+      document.getElementById('modalItemName').textContent = localized.name;
       modalSelected = { rice:'White', protein:'Tuna', sauce:'Sriracha', addons:[], sides:[] };
       const riceGroup = document.getElementById('optRice');
       if (riceGroup && !riceGroup.querySelector('.opt-btn')) {
-        riceGroup.innerHTML = `<span class="opt-btn active" data-value="White">🍚 White</span><span class="opt-btn" data-value="Brown">🍚 Brown</span><span class="opt-btn" data-value="Mixed">🍚 Mixed</span>`;
+        riceGroup.innerHTML = `<span class="opt-btn active" data-value="White">🍚 ${t('riceWhite')}</span><span class="opt-btn" data-value="Brown">🍚 ${t('riceBrown')}</span><span class="opt-btn" data-value="Mixed">🍚 ${t('riceMixed')}</span>`;
       }
       const proteinGroup = document.getElementById('optProtein');
       if (proteinGroup && !proteinGroup.querySelector('.opt-btn')) {
-        proteinGroup.innerHTML = `<span class="opt-btn active" data-value="Tuna">🐟 Tuna</span><span class="opt-btn" data-value="Chicken">🐔 Chicken</span><span class="opt-btn" data-value="Tofu">🌱 Tofu</span>`;
+        proteinGroup.innerHTML = `<span class="opt-btn active" data-value="Tuna">🐟 ${t('proteinTuna')}</span><span class="opt-btn" data-value="Chicken">🐔 ${t('proteinChicken')}</span><span class="opt-btn" data-value="Tofu">🌱 ${t('proteinTofu')}</span>`;
       }
       const sauceGroup = document.getElementById('optSauce');
       if (sauceGroup && !sauceGroup.querySelector('.opt-btn')) {
-        sauceGroup.innerHTML = `<span class="opt-btn active" data-value="Sriracha">🌶 Sriracha</span><span class="opt-btn" data-value="Mayo">🥄 Mayo</span><span class="opt-btn" data-value="Teriyaki">🍯 Teriyaki</span><span class="opt-btn" data-value="None">🚫 None</span>`;
+        sauceGroup.innerHTML = `<span class="opt-btn active" data-value="Sriracha">🌶 ${t('sauceSriracha')}</span><span class="opt-btn" data-value="Mayo">🥄 ${t('sauceMayo')}</span><span class="opt-btn" data-value="Teriyaki">🍯 ${t('sauceTeriyaki')}</span><span class="opt-btn" data-value="None">🚫 ${t('sauceNone')}</span>`;
       }
       const addonsGroup = document.getElementById('optAddons');
       if (addonsGroup && !addonsGroup.querySelector('.opt-btn')) {
-        addonsGroup.innerHTML = `<span class="opt-btn" data-value="Avocado">🥑 Avocado</span><span class="opt-btn" data-value="Sesame">🌾 Sesame</span><span class="opt-btn" data-value="Kimchi">🥬 Kimchi</span><span class="opt-btn" data-value="Cheese">🧀 Cheese</span>`;
+        addonsGroup.innerHTML = `<span class="opt-btn" data-value="Avocado">🥑 ${t('addonAvocado')}</span><span class="opt-btn" data-value="Sesame">🌾 ${t('addonSesame')}</span><span class="opt-btn" data-value="Kimchi">🥬 ${t('addonKimchi')}</span><span class="opt-btn" data-value="Cheese">🧀 ${t('addonCheese')}</span>`;
       }
       const sidesGroup = document.getElementById('optSides');
       if (sidesGroup && !sidesGroup.querySelector('.opt-btn')) {
-        sidesGroup.innerHTML = `<span class="opt-btn" data-value="Miso Soup" data-price="100">🍜 <span data-key="misoSoup">Miso Soup</span> (+¥100)</span><span class="opt-btn" data-value="Tea" data-price="80">🍵 <span data-key="tea">Tea</span> (+¥80)</span>`;
+        sidesGroup.innerHTML = `<span class="opt-btn" data-value="Miso Soup" data-price="100">🍜 ${t('sideMisoSoup')} (+¥100)</span><span class="opt-btn" data-value="Tea" data-price="80">🍵 ${t('sideTea')} (+¥80)</span>`;
       }
       document.querySelectorAll('#optRice .opt-btn').forEach(el => el.classList.toggle('active', el.dataset.value === 'White'));
       document.querySelectorAll('#optProtein .opt-btn').forEach(el => el.classList.toggle('active', el.dataset.value === 'Tuna'));
